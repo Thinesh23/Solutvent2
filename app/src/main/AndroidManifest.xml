@@ -35,11 +35,12 @@
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home" />
-<!--        <activity android:name=".EventList" />
+
+        <activity android:name=".EventList" />
         <activity android:name=".EventDetail" />
         <activity android:name=".ShowComment" />
         <activity android:name=".ShowBooking" />
-        <activity android:name=".BookingActivity2" />-->
+        <activity android:name=".BookingActivity2" />
         <activity android:name=".BookingHistory" />
         <activity android:name=".ChattingMenu" />
 
@@ -60,6 +61,8 @@
             android:exported="true" />
 
         <activity android:name=".ChattingActivity" />
+        <activity android:name=".CustomerReg" />
+        <activity android:name=".PlannerReg"></activity>
     </application>
 
 </manifest>

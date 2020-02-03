@@ -337,7 +337,7 @@ public class ChooseUser extends AppCompatActivity {
                             } else {
 
                                 mDialog.dismiss();
-                                User user = new User(
+/*                                User user = new User(
                                         edtFirstName.getText().toString(),
                                         edtEmail.getText().toString(),
                                         edtPassword.getText().toString(),
@@ -346,8 +346,8 @@ public class ChooseUser extends AppCompatActivity {
                                         edtSecureCode.getText().toString(),
                                         edtCompanyName.getText().toString(),
                                         "null",
-                                        "null");
-                                table_user.child(edtPhone.getText().toString()).setValue(user);
+                                        "null");*/
+                                //table_user.child(edtPhone.getText().toString()).setValue(user);
                                 Toast.makeText(ChooseUser.this, "User Account Registered", Toast.LENGTH_SHORT).show();
                                 finish();
                             }

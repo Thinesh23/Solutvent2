@@ -1,7 +1,9 @@
 package example.com.solutvent;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -15,10 +17,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +45,8 @@ public class MainActivity extends AppCompatActivity{
 
     Button btnSignIn,btnSignUp;
     TextView txtSlogan;
-    String Phone,Password;
+    String Phone,Password, userType;
+    RadioGroup radioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +79,7 @@ public class MainActivity extends AppCompatActivity{
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent signUp = new Intent(MainActivity.this, ChooseUser.class);
-                startActivity(signUp);
+                showChooseUser();
             }
         });
 
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void printKeyHash() {
         try{
-            PackageInfo info = getPackageManager().getPackageInfo("example.com.engage",
+            PackageInfo info = getPackageManager().getPackageInfo("example.com.solutvent",
                     PackageManager.GET_SIGNATURES);
             for (Signature signature:info.signatures){
                 MessageDigest md = MessageDigest.getInstance("SHA");
@@ -112,8 +116,6 @@ public class MainActivity extends AppCompatActivity{
         Password = pwd;
 
         if(Common.isConnectedToInternet(getBaseContext())){
-
-
 
             final ProgressDialog mDialog = new ProgressDialog(MainActivity.this);
             mDialog.setMessage("Please Wait");
@@ -156,5 +158,50 @@ public class MainActivity extends AppCompatActivity{
             return;
         }
     }
+
+    private void showChooseUser() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        alertDialog.setTitle("Choose User");
+        alertDialog.setIcon(R.drawable.ic_person_black_24dp);
+        alertDialog.setMessage("Please choose user type");
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View layout_home = inflater.inflate(R.layout.choose_user, null);
+
+        radioGroup = (RadioGroup) layout_home.findViewById(R.id.user_select);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.radioCustomer:
+                        userType = "Customer";
+                        break;
+                    case R.id.radioPlanner:
+                        userType = "Planner";
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
+
+        alertDialog.setView(layout_home);
+        alertDialog.setPositiveButton("Select", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                if (userType.equals("Customer")){
+                    Intent signIn = new Intent(MainActivity.this, CustomerReg.class);
+                    startActivity(signIn);
+                } else if (userType.equals("Planner")){
+                    Intent signIn = new Intent(MainActivity.this, PlannerReg.class);
+                    startActivity(signIn);
+                }
+
+            }
+        });
+        alertDialog.show();
+    }
+
 
 }

@@ -133,9 +133,9 @@ public class Home extends AppCompatActivity
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {
-                        //Intent eventList = new Intent(Home.this,EventList.class);
-                        //eventList.putExtra("CategoryId",adapter.getRef(position).getKey());
-                        //startActivity(eventList);
+                        Intent eventList = new Intent(Home.this,EventList.class);
+                        eventList.putExtra("CategoryId",adapter.getRef(position).getKey());
+                        startActivity(eventList);
                     }
                 });
             }
@@ -580,8 +580,8 @@ public class Home extends AppCompatActivity
         if (id == R.id.nav_menu) {
 
         } else if (id == R.id.nav_booking_history){
-            //Intent historyIntent = new Intent(Home.this,BookingHistory.class);
-            //startActivity(historyIntent);
+            Intent historyIntent = new Intent(Home.this,BookingHistory.class);
+            startActivity(historyIntent);
 
         } else if (id == R.id.nav_log_out){
             status("offline");
