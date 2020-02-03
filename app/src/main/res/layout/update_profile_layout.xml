@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:hint="First Name"
+            android:hint="Company Name"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
             app:met_baseColor="@color/colorPrimary"
@@ -49,11 +49,11 @@
             app:layout_constraintTop_toBottomOf="@id/edtFirstName" />
 
         <com.rengwuxian.materialedittext.MaterialEditText
-            android:id="@+id/edtCompanyName"
+            android:id="@+id/edtAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:hint="Company Name"
+            android:hint="Address"
             android:textColor="@color/colorPrimary"
             android:textSize="15sp"
             app:met_baseColor="@color/colorPrimary"
@@ -64,6 +64,23 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edtEmail"/>
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:id="@+id/edtPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="3dp"
+            android:hint="Price"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            app:met_baseColor="@color/colorPrimary"
+            app:met_textColorHint="@color/colorPrimary"
+            app:met_floatingLabel="highlight"
+            app:met_primaryColor="@color/colorPrimary"
+            app:met_singleLineEllipsis="true"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtAddress"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtSecureCode"
@@ -80,7 +97,7 @@
             app:met_singleLineEllipsis="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtCompanyName"/>
+            app:layout_constraintTop_toBottomOf="@id/edtPrice"/>
 
         <Button
             android:id="@+id/btnSelect"

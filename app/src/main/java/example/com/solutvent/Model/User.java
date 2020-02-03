@@ -10,7 +10,6 @@ public class User {
     private String isStaff;
     private String isPlanner;
     private String secureCode;
-    private String companyName;
     private String companyImage;
     private String address;
     private String state;
@@ -20,7 +19,7 @@ public class User {
     public User() {
     }
 
-    public User(String firstName, String email, String password, String phone, String status, String isStaff, String isPlanner, String secureCode, String companyName, String companyImage, String address, String state, String price, String menuId) {
+    public User(String firstName, String email, String password, String phone, String status, String isStaff, String isPlanner, String secureCode, String companyImage, String address, String state, String price, String menuId) {
         this.firstName = firstName;
         this.email = email;
         this.password = password;
@@ -29,7 +28,6 @@ public class User {
         this.isStaff = isStaff;
         this.isPlanner = isPlanner;
         this.secureCode = secureCode;
-        this.companyName = companyName;
         this.companyImage = companyImage;
         this.address = address;
         this.state = state;
@@ -152,13 +150,5 @@ public class User {
 
     public void setSecureCode(String secureCode) {
         this.secureCode = secureCode;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
     }
 }

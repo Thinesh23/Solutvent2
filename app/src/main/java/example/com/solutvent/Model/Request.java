@@ -2,12 +2,15 @@ package example.com.solutvent.Model;
 
 public class Request {
     private String id;
-    private String organizerName;
-    private String organizerPhone;
-    private String organizerEmail;
+    private String customerName;
+    private String customerPhone;
+    private String customerEmail;
+    private String customerAddress;
     private String plannerPhone;
     private String plannerEmail;
     private String plannerCompanyName;
+    private String plannerPrice;
+    private String plannerAddress;
     private String date;
     private String time;
     private String status;
@@ -18,19 +21,70 @@ public class Request {
 
     }
 
-    public Request(String id, String organizerName, String organizerPhone, String organizerEmail, String plannerPhone, String plannerEmail, String plannerCompanyName, String date, String time, String status, Long slot, String payment) {
+    public Request(String id, String customerName, String customerPhone, String customerEmail, String customerAddress, String plannerPhone, String plannerEmail, String plannerCompanyName, String plannerPrice, String plannerAddress, String date, String time, String status, String payment, Long slot) {
         this.id = id;
-        this.organizerName = organizerName;
-        this.organizerPhone = organizerPhone;
-        this.organizerEmail = organizerEmail;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+        this.customerEmail = customerEmail;
+        this.customerAddress = customerAddress;
         this.plannerPhone = plannerPhone;
         this.plannerEmail = plannerEmail;
         this.plannerCompanyName = plannerCompanyName;
+        this.plannerPrice = plannerPrice;
+        this.plannerAddress = plannerAddress;
         this.date = date;
         this.time = time;
         this.status = status;
-        this.slot = slot;
         this.payment = payment;
+        this.slot = slot;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+
+    public String getCustomerPhone() {
+        return customerPhone;
+    }
+
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public String getCustomerAddress() {
+        return customerAddress;
+    }
+
+    public void setCustomerAddress(String customerAddress) {
+        this.customerAddress = customerAddress;
+    }
+
+    public String getPlannerPrice() {
+        return plannerPrice;
+    }
+
+    public void setPlannerPrice(String plannerPrice) {
+        this.plannerPrice = plannerPrice;
+    }
+
+    public String getPlannerAddress() {
+        return plannerAddress;
+    }
+
+    public void setPlannerAddress(String plannerAddress) {
+        this.plannerAddress = plannerAddress;
     }
 
     public String getPayment() {
@@ -55,30 +109,6 @@ public class Request {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public String getOrganizerName() {
-        return organizerName;
-    }
-
-    public void setOrganizerName(String organizerName) {
-        this.organizerName = organizerName;
-    }
-
-    public String getOrganizerPhone() {
-        return organizerPhone;
-    }
-
-    public void setOrganizerPhone(String organizerPhone) {
-        this.organizerPhone = organizerPhone;
-    }
-
-    public String getOrganizerEmail() {
-        return organizerEmail;
-    }
-
-    public void setOrganizerEmail(String organizerEmail) {
-        this.organizerEmail = organizerEmail;
     }
 
     public String getPlannerPhone() {

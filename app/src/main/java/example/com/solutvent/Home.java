@@ -664,14 +664,14 @@ public class Home extends AppCompatActivity
 
         final MaterialEditText updateFirstName = (MaterialEditText)layout_home.findViewById(R.id.edtFirstName);
         final MaterialEditText updateEmail = (MaterialEditText)layout_home.findViewById(R.id.edtEmail);
-        final MaterialEditText updateCompanyName = (MaterialEditText)layout_home.findViewById(R.id.edtCompanyName);
+        final MaterialEditText updateAddress = (MaterialEditText)layout_home.findViewById(R.id.edtAddress);
         final MaterialEditText updateSecureCode = (MaterialEditText)layout_home.findViewById(R.id.edtSecureCode);
         final DatabaseReference table_request = database.getReference("Requests");
 
         //Set default
         updateFirstName.setText(Common.currentUser.getFirstName());
         updateEmail.setText(Common.currentUser.getEmail());
-        updateCompanyName.setText(Common.currentUser.getCompanyName());
+        updateAddress.setText(Common.currentUser.getAddress());
         updateSecureCode.setText(Common.currentUser.getSecureCode());
         alertDialog.setView(layout_home);
 
@@ -684,13 +684,13 @@ public class Home extends AppCompatActivity
 
                 if(updateFirstName.getText().toString().trim().length() != 0 &&
                         updateEmail.getText().toString().trim().length() != 0 &&
-                        updateCompanyName.getText().toString().trim().length() != 0 &&
+                        updateAddress.getText().toString().trim().length() != 0 &&
                         updateSecureCode.getText().toString().trim().length() != 0) {
 
                         //updated
                         Common.currentUser.setFirstName(updateFirstName.getText().toString());
                         Common.currentUser.setEmail(updateEmail.getText().toString());
-                        Common.currentUser.setCompanyName(updateCompanyName.getText().toString());
+                        Common.currentUser.setAddress(updateAddress.getText().toString());
                         Common.currentUser.setSecureCode(updateSecureCode.getText().toString());
 
                     FirebaseDatabase.getInstance().getReference("User")
@@ -707,9 +707,10 @@ public class Home extends AppCompatActivity
                                                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
                                                     Request item = dataSnapshot1.getValue(Request.class);
                                                     HashMap<String, Object> hashMap = new HashMap<>();
-                                                    hashMap.put("organizerPhone", Common.currentUser.getPhone());
-                                                    hashMap.put("organizerEmail", Common.currentUser.getEmail());
-                                                    hashMap.put("organizerName", Common.currentUser.getCompanyName());
+                                                    hashMap.put("customerPhone", Common.currentUser.getPhone());
+                                                    hashMap.put("customerEmail", Common.currentUser.getEmail());
+                                                    hashMap.put("customerName", Common.currentUser.getFirstName());
+                                                    hashMap.put("customerAddress", Common.currentUser.getAddress());
                                                     table_request.child(item.getId()).updateChildren(hashMap)
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override
@@ -749,7 +750,8 @@ public class Home extends AppCompatActivity
 
         final MaterialEditText updateFirstName = (MaterialEditText)layout_home.findViewById(R.id.edtFirstName);
         final MaterialEditText updateEmail = (MaterialEditText)layout_home.findViewById(R.id.edtEmail);
-        final MaterialEditText updateCompanyName = (MaterialEditText)layout_home.findViewById(R.id.edtCompanyName);
+        final MaterialEditText updateAddress = (MaterialEditText)layout_home.findViewById(R.id.edtAddress);
+        final MaterialEditText updatePrice = (MaterialEditText)layout_home.findViewById(R.id.edtPrice);
         final MaterialEditText updateSecureCode = (MaterialEditText)layout_home.findViewById(R.id.edtSecureCode);
 
 
@@ -776,7 +778,8 @@ public class Home extends AppCompatActivity
         //Set default
         updateFirstName.setText(Common.currentUser.getFirstName());
         updateEmail.setText(Common.currentUser.getEmail());
-        updateCompanyName.setText(Common.currentUser.getCompanyName());
+        updateAddress.setText(Common.currentUser.getAddress());
+        updatePrice.setText(Common.currentUser.getPrice());
         updateSecureCode.setText(Common.currentUser.getSecureCode());
         alertDialog.setView(layout_home);
 
@@ -789,13 +792,15 @@ public class Home extends AppCompatActivity
 
                 if(updateFirstName.getText().toString().trim().length() != 0 &&
                         updateEmail.getText().toString().trim().length() != 0 &&
-                        updateCompanyName.getText().toString().trim().length() != 0 &&
+                        updateAddress.getText().toString().trim().length() != 0 &&
+                        updatePrice.getText().toString().trim().length() != 0 &&
                         updateSecureCode.getText().toString().trim().length() != 0) {
 
                     //updated
                     Common.currentUser.setFirstName(updateFirstName.getText().toString());
                     Common.currentUser.setEmail(updateEmail.getText().toString());
-                    Common.currentUser.setCompanyName(updateCompanyName.getText().toString());
+                    Common.currentUser.setAddress(updateAddress.getText().toString());
+                    Common.currentUser.setPrice(updatePrice.getText().toString());
                     Common.currentUser.setSecureCode(updateSecureCode.getText().toString());
 
                     FirebaseDatabase.getInstance().getReference("User")
@@ -814,7 +819,7 @@ public class Home extends AppCompatActivity
                                                     HashMap<String, Object> hashMap = new HashMap<>();
                                                     hashMap.put("plannerPhone", Common.currentUser.getPhone());
                                                     hashMap.put("plannerEmail", Common.currentUser.getEmail());
-                                                    hashMap.put("plannerCompanyName", Common.currentUser.getCompanyName());
+                                                    hashMap.put("plannerCompanyName", Common.currentUser.getFirstName());
                                                     table_request.child(item.getId()).updateChildren(hashMap)
                                                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                                                 @Override

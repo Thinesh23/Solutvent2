@@ -64,10 +64,12 @@ public class BookingStep2Fragment  extends Fragment{
         final Request request = new Request();
 
         request.setId(String.valueOf(System.currentTimeMillis()));
-        request.setOrganizerEmail(Common.currentUser.getEmail());
-        request.setOrganizerName(Common.currentUser.getFirstName());
-        request.setOrganizerPhone(Common.currentUser.getPhone());
-        request.setPlannerCompanyName(Common.currentCompany.getCompanyName());
+        request.setCustomerEmail(Common.currentUser.getEmail());
+        request.setCustomerName(Common.currentUser.getFirstName());
+        request.setCustomerPhone(Common.currentUser.getPhone());
+        request.setCustomerAddress(Common.currentUser.getAddress());
+        request.setPlannerPrice(Common.currentCompany.getPrice());
+        request.setPlannerCompanyName(Common.currentCompany.getFirstName());
         request.setPlannerEmail(Common.currentCompany.getEmail());
         request.setPlannerPhone(Common.currentCompany.getPhone());
         request.setTime(new StringBuilder(Common.convertTimeSlotToString(Common.currentTimeSlot)).toString());
@@ -140,7 +142,7 @@ public class BookingStep2Fragment  extends Fragment{
         organizerName.setText(currentUser.getFirstName());
         organizerMail.setText(currentUser.getEmail());
         organizerPhone.setText(currentUser.getPhone());
-        companyName.setText(currentCompany.getCompanyName());
+        companyName.setText(currentCompany.getFirstName());
         companyEmail.setText(currentCompany.getEmail());
         companyPhone.setText(currentCompany.getPhone());
         bookingTime.setText(new StringBuilder(Common.convertTimeSlotToString(Common.currentTimeSlot)));

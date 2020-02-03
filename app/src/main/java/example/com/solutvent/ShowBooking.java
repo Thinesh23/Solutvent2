@@ -137,9 +137,9 @@ public class ShowBooking extends AppCompatActivity{
         adapter = new FirebaseRecyclerAdapter<Request, ShowBookingViewHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ShowBookingViewHolder holder, final int position, @NonNull Request model) {
-                holder.txtUserPhone.setText(model.getOrganizerPhone());
-                holder.txtUserEmail.setText(model.getOrganizerEmail());
-                holder.txtUserName.setText(model.getOrganizerName());
+                holder.txtUserPhone.setText(model.getCustomerPhone());
+                holder.txtUserEmail.setText(model.getCustomerEmail());
+                holder.txtUserName.setText(model.getCustomerName());
                 holder.txtStatusState.setText(convertCodeToStatus(model.getStatus()));
                 if(holder.txtStatusState.getText().toString().equals("Deal Confirmed")) {
                     holder.txtbookingstate.setText("Deal Confirmed");
@@ -235,7 +235,7 @@ public class ShowBooking extends AppCompatActivity{
 
     private void sendOrderStatusToUser(final String key, final Request item){
         DatabaseReference tokens = database.getReference("Tokens");
-        tokens.orderByKey().equalTo(item.getOrganizerPhone())
+        tokens.orderByKey().equalTo(item.getCustomerPhone())
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
