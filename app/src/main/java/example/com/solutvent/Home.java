@@ -150,12 +150,12 @@ public class Home extends AppCompatActivity
         };
 
         if (Common.currentUser.getIsStaff().equals("true")){
-            //addCategory.show();
+            addCategory.show();
             addCategory.hide();
             addCategory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ShowAddCategoryDialog();
+                    ShowAddCategoryDialog();
                 }
             });
         } else {
