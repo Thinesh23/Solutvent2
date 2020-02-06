@@ -25,14 +25,14 @@
         app:sv_doneTextColor="@android:color/white"
         app:sv_doneStepMarkColor="@android:color/white"/>
 
-    <example.com.engage.Common.NonSwipeViewPager
+    <example.com.solutvent.Common.NonSwipeViewPager
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/view_pager"
         android:layout_below="@+id/step_view"
         android:layout_above="@+id/layout_button">
 
-    </example.com.engage.Common.NonSwipeViewPager>
+    </example.com.solutvent.Common.NonSwipeViewPager>
 
     <LinearLayout
         android:layout_width="match_parent"

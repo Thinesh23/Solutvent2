@@ -303,4 +303,10 @@ public class PlannerReg extends AppCompatActivity {
         });
         alertDialog.show();
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

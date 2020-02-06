@@ -129,7 +129,7 @@ public class BookingHistory extends AppCompatActivity {
     }
 
    private void loadHistory(){
-       Query getOrderByUser = requests.orderByChild("organizerPhone").equalTo(Common.currentUser.getPhone());
+       Query getOrderByUser = requests.orderByChild("customerPhone").equalTo(Common.currentUser.getPhone());
        FirebaseRecyclerOptions<Request> orderOptions = new FirebaseRecyclerOptions.Builder<Request>()
                .setQuery(getOrderByUser,Request.class)
                .build();

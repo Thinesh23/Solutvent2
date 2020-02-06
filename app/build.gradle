@@ -53,7 +53,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
     //Sql Database
-    implementation 'io.paperdb:paperdb:2.1'
+    implementation 'io.paperdb:paperdb:2.6'
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 
     //Android library

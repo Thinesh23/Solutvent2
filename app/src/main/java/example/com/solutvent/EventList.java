@@ -132,10 +132,10 @@ public class EventList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Note: add this code before setContentView method
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+/*        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/KGSkinnyLatte.ttf")
                 .setFontAttrId(R.attr.fontPath)
-                .build());
+                .build());*/
         setContentView(R.layout.activity_event_list);
 
         //Init Facebook
@@ -260,6 +260,8 @@ public class EventList extends AppCompatActivity {
             @Override
             protected void onBindViewHolder(@NonNull CompanyViewHolder viewHolder, final int position, @NonNull final User model) {
                 viewHolder.event_name.setText(model.getFirstName());
+                viewHolder.package_price.setText("Starting from RM "+model.getPrice());
+                viewHolder.state_location.setText(model.getState());
                 Picasso.with(getBaseContext()).load(model.getCompanyImage()).into(viewHolder.event_image);
 
                 newEventId = searchAdapter.getRef(position).getKey();
@@ -320,6 +322,8 @@ public class EventList extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull final CompanyViewHolder viewHolder, final int position, @NonNull final User model) {
 
                 viewHolder.event_name.setText(model.getFirstName());
+                viewHolder.package_price.setText("Starting from RM "+model.getPrice());
+                viewHolder.state_location.setText(model.getState());
                 Picasso.with(getBaseContext()).load(model.getCompanyImage()).into(viewHolder.event_image);
 
                 //Click to share

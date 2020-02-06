@@ -65,6 +65,16 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/edtEmail"/>
 
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/state_update_planner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:hint="Choose State"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edtAddress"/>
+
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtPrice"
             android:layout_width="match_parent"
@@ -80,7 +90,7 @@
             app:met_singleLineEllipsis="true"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edtAddress"/>
+            app:layout_constraintTop_toBottomOf="@id/state_update_planner"/>
 
         <com.rengwuxian.materialedittext.MaterialEditText
             android:id="@+id/edtSecureCode"

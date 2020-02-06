@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.FacebookSdk;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 
 import example.com.solutvent.Common.Common;
 import example.com.solutvent.Model.User;
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
     Button btnSignIn,btnSignUp;
     TextView txtSlogan;
-    String Phone,Password, userType;
+    String Phone,Password, userType="Customer";
     RadioGroup radioGroup;
 
     @Override
@@ -121,7 +124,7 @@ public class MainActivity extends AppCompatActivity{
             mDialog.setMessage("Please Wait");
             mDialog.show();
 
-            table_user.addValueEventListener(new ValueEventListener() {
+            table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -134,6 +137,7 @@ public class MainActivity extends AppCompatActivity{
                         if (user.getPassword().equals(Password)) {
                             Intent eventIntent = new Intent(MainActivity.this, Home.class);
                             Common.currentUser = user;
+                            status("online");
                             startActivity(eventIntent);
                             Toast.makeText(MainActivity.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
                             finish();
@@ -157,6 +161,23 @@ public class MainActivity extends AppCompatActivity{
             Toast.makeText(MainActivity.this,"Please check your connection !!", Toast.LENGTH_SHORT).show();
             return;
         }
+    }
+
+    private void status (String status){
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("status",status);
+        DatabaseReference table_user = FirebaseDatabase.getInstance().getReference("User");
+        table_user.child(Common.currentUser.getPhone())
+                .updateChildren(hashMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+
+                    }
+                });
+
+
     }
 
     private void showChooseUser() {

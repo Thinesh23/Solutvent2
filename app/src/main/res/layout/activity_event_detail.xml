@@ -196,13 +196,39 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:padding="12dp"
+                            android:lineSpacingMultiplier="1.5"
+                            android:textSize="14sp"
+                            android:text="Address :" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:id="@+id/event_address"
+                            android:padding="12dp"
+                            android:lineSpacingMultiplier="1.5"
+                            android:textSize="14sp"
+                            android:text="Puncak Jalil, Selangor" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                         <android.support.design.widget.FloatingActionButton
                             android:id="@+id/btn_show_booking"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="5dp"
                             android:backgroundTint="@color/colorAccent"
                             android:src="@drawable/ic_person_black_24dp"
                             app:elevation="6dp"

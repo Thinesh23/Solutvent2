@@ -47,10 +47,13 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -87,6 +90,9 @@ public class Home extends AppCompatActivity
 
     Request currentRequest;
 
+    String stateName = "";
+    List<String> stateList = new ArrayList<>();
+
 
     Category newCategory;
 
@@ -119,6 +125,10 @@ public class Home extends AppCompatActivity
         table_user = database.getReference("User");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        stateList.add("Choose State");
+        stateList.add("KL");
+        stateList.add("Selangor");
 
         FirebaseRecyclerOptions<Category> options = new FirebaseRecyclerOptions.Builder<Category>()
                 .setQuery(category,Category.class)
@@ -523,7 +533,6 @@ public class Home extends AppCompatActivity
     @Override
     protected void onPause(){
         super.onPause();
-        status("offline");
     }
 
     private void loadMenu(){
@@ -585,7 +594,6 @@ public class Home extends AppCompatActivity
 
         } else if (id == R.id.nav_log_out){
             status("offline");
-            //Common.currentUser = null;
             Paper.book().destroy();
             Intent signIn = new Intent(Home.this, SignIn.class);
             signIn.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -596,7 +604,7 @@ public class Home extends AppCompatActivity
             if(Common.currentUser.getIsPlanner().equals("true")){
                 showUpdatePlannerProfileDialog();
             } else {
-                showUpdateProfileDialog();
+                showUpdateCustomerProfileDialog();
             }
 
         }
@@ -653,19 +661,20 @@ public class Home extends AppCompatActivity
         }
     }
 
-    private void showUpdateProfileDialog() {
+    private void showUpdateCustomerProfileDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Update Profile");
         alertDialog.setIcon(R.drawable.ic_person_black_24dp);
         alertDialog.setMessage("Please fill all information");
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        View layout_home = inflater.inflate(R.layout.update_organizer_profile_layout,null);
+        View layout_home = inflater.inflate(R.layout.update_customer_profile_layout,null);
 
         final MaterialEditText updateFirstName = (MaterialEditText)layout_home.findViewById(R.id.edtFirstName);
         final MaterialEditText updateEmail = (MaterialEditText)layout_home.findViewById(R.id.edtEmail);
         final MaterialEditText updateAddress = (MaterialEditText)layout_home.findViewById(R.id.edtAddress);
         final MaterialEditText updateSecureCode = (MaterialEditText)layout_home.findViewById(R.id.edtSecureCode);
+        final MaterialSpinner state_update_customer = (MaterialSpinner)layout_home.findViewById(R.id.state_update_customer);
         final DatabaseReference table_request = database.getReference("Requests");
 
         //Set default
@@ -674,6 +683,14 @@ public class Home extends AppCompatActivity
         updateAddress.setText(Common.currentUser.getAddress());
         updateSecureCode.setText(Common.currentUser.getSecureCode());
         alertDialog.setView(layout_home);
+
+        state_update_customer.setItems(stateList);
+        state_update_customer.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                stateName = item.toString();
+            }
+        });
 
         alertDialog.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
             @Override
@@ -685,13 +702,15 @@ public class Home extends AppCompatActivity
                 if(updateFirstName.getText().toString().trim().length() != 0 &&
                         updateEmail.getText().toString().trim().length() != 0 &&
                         updateAddress.getText().toString().trim().length() != 0 &&
-                        updateSecureCode.getText().toString().trim().length() != 0) {
+                        updateSecureCode.getText().toString().trim().length() != 0 &&
+                        !stateName.equals("Choose State")) {
 
                         //updated
                         Common.currentUser.setFirstName(updateFirstName.getText().toString());
                         Common.currentUser.setEmail(updateEmail.getText().toString());
                         Common.currentUser.setAddress(updateAddress.getText().toString());
                         Common.currentUser.setSecureCode(updateSecureCode.getText().toString());
+                        Common.currentUser.setState(stateName);
 
                     FirebaseDatabase.getInstance().getReference("User")
                             .child(Common.currentUser.getPhone())
@@ -700,7 +719,7 @@ public class Home extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Toast.makeText(Home.this,"Profile updated",Toast.LENGTH_SHORT).show();
-                                    table_request.orderByChild("organizerPhone").equalTo(Common.currentUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    table_request.orderByChild("customerPhone").equalTo(Common.currentUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
                                             if (dataSnapshot.exists()){
@@ -746,13 +765,14 @@ public class Home extends AppCompatActivity
         alertDialog.setMessage("Please fill all information");
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        View layout_home = inflater.inflate(R.layout.update_profile_layout,null);
+        View layout_home = inflater.inflate(R.layout.update_planner_profile_layout,null);
 
         final MaterialEditText updateFirstName = (MaterialEditText)layout_home.findViewById(R.id.edtFirstName);
         final MaterialEditText updateEmail = (MaterialEditText)layout_home.findViewById(R.id.edtEmail);
         final MaterialEditText updateAddress = (MaterialEditText)layout_home.findViewById(R.id.edtAddress);
         final MaterialEditText updatePrice = (MaterialEditText)layout_home.findViewById(R.id.edtPrice);
         final MaterialEditText updateSecureCode = (MaterialEditText)layout_home.findViewById(R.id.edtSecureCode);
+        final MaterialSpinner state_update_planner = (MaterialSpinner)layout_home.findViewById(R.id.state_update_planner);
 
 
         btnSelect = layout_home.findViewById(R.id.btnSelect);
@@ -781,7 +801,16 @@ public class Home extends AppCompatActivity
         updateAddress.setText(Common.currentUser.getAddress());
         updatePrice.setText(Common.currentUser.getPrice());
         updateSecureCode.setText(Common.currentUser.getSecureCode());
+
         alertDialog.setView(layout_home);
+
+        state_update_planner.setItems(stateList);
+        state_update_planner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
+                stateName = item.toString();
+            }
+        });
 
         alertDialog.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
             @Override
@@ -794,7 +823,8 @@ public class Home extends AppCompatActivity
                         updateEmail.getText().toString().trim().length() != 0 &&
                         updateAddress.getText().toString().trim().length() != 0 &&
                         updatePrice.getText().toString().trim().length() != 0 &&
-                        updateSecureCode.getText().toString().trim().length() != 0) {
+                        updateSecureCode.getText().toString().trim().length() != 0 &&
+                        !stateName.equals("Choose State")) {
 
                     //updated
                     Common.currentUser.setFirstName(updateFirstName.getText().toString());
@@ -802,6 +832,7 @@ public class Home extends AppCompatActivity
                     Common.currentUser.setAddress(updateAddress.getText().toString());
                     Common.currentUser.setPrice(updatePrice.getText().toString());
                     Common.currentUser.setSecureCode(updateSecureCode.getText().toString());
+                    Common.currentUser.setState(stateName);
 
                     FirebaseDatabase.getInstance().getReference("User")
                             .child(Common.currentUser.getPhone())

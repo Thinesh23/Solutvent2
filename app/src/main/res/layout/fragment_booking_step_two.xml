@@ -6,12 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="191dp"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/logoblack" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -24,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:fontFamily="serif-monospace"
-            android:text="THANK YOU FOR BOOKING WITH ENGAGE !!"
+            android:text="THANK YOU FOR BOOKING WITH SOLUTVENT !!"
             android:textAllCaps="true"
             android:textSize="18sp"
             android:textStyle="bold" />

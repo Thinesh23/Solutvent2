@@ -14,7 +14,7 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder implements
         View.OnClickListener,
         View.OnCreateContextMenuListener{
 
-    public TextView event_name,event_booking;
+    public TextView event_name,event_booking,package_price, state_location;
     public ImageView event_image,fav_image,share_image,quick_cart;
 
     private ItemClickListener itemClickListener;
@@ -25,6 +25,8 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder implements
 
         event_name = (TextView) itemView.findViewById(R.id.event_name);
         event_image = (ImageView) itemView.findViewById(R.id.event_image);
+        package_price = (TextView) itemView.findViewById(R.id.package_price);
+        state_location = (TextView) itemView.findViewById(R.id.state_location);
         //fav_image = (ImageView) itemView.findViewById(R.id.fav);
         share_image = (ImageView) itemView.findViewById(R.id.btnShare);
         //quick_cart = (ImageView) itemView.findViewById(R.id.btn_quick_cart);

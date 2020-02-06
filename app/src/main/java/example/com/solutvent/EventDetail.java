@@ -35,7 +35,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EventDetail extends AppCompatActivity implements RatingDialogListener{
 
-    TextView event_name, event_userContact, event_userEmail;
+    TextView event_name, event_userContact, event_userEmail, event_address;
     ImageView event_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
     FloatingActionButton btnRating,btnBooking,btnProfile;
@@ -59,10 +59,10 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Note: add this code before setContentView method
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+/*        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/KGSkinnyLatte.ttf")
                 .setFontAttrId(R.attr.fontPath)
-                .build());
+                .build());*/
         setContentView(R.layout.activity_event_detail);
 
         database = FirebaseDatabase.getInstance();
@@ -78,6 +78,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         event_name = (TextView) findViewById(R.id.event_name);
         event_userContact = (TextView) findViewById(R.id.event_contact);
         event_userEmail = (TextView) findViewById(R.id.event_email);
+        event_address = (TextView) findViewById(R.id.event_address);
 
         event_image = (ImageView) findViewById(R.id.img_event);
 
@@ -126,40 +127,27 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         }
         btnBooking = (FloatingActionButton) findViewById(R.id.btn_booking);
 
-
-
-        if(Common.currentUser.getPhone().equals(Common.currentCompany.getPhone())){
+        if(Common.currentUser.getIsPlanner().equals("true") ||
+                Common.currentUser.getIsStaff().equals("true")){
             btnBooking.hide();
             btnRating.hide();
         } else {
-            if (Common.currentUser.getIsStaff().toString().equals("true")){
-                btnBooking.hide();
-                btnRating.show();
-                btnRating.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showRatingDialog();
-                    }
-                });
-            } else {
-                btnRating.show();
-                btnRating.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        showRatingDialog();
-                    }
-                });
-                btnBooking.show();
-                btnBooking.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(EventDetail.this,BookingActivity2.class);
-                        intent.putExtra(Common.INTENT_EVENT_ID,eventId);
-                        startActivity(intent);
-                    }
-                });
-            }
-
+            btnRating.show();
+            btnRating.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showRatingDialog();
+                }
+            });
+            btnBooking.show();
+            btnBooking.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(EventDetail.this,BookingActivity2.class);
+                    intent.putExtra(Common.INTENT_EVENT_ID,eventId);
+                    startActivity(intent);
+                }
+            });
         }
     }
 
@@ -193,6 +181,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
                     event_name.setText(currentCompany.getFirstName());
                     event_userContact.setText(currentCompany.getPhone());
                     event_userEmail.setText(currentCompany.getEmail());
+                    event_address.setText(currentCompany.getAddress());
                 }
             }
 

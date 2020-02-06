@@ -53,10 +53,10 @@ public class ShowComment extends AppCompatActivity{
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+/*        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
                 .setDefaultFontPath("fonts/KGSkinnyLatte.ttf")
                 .setFontAttrId(R.attr.fontPath)
-                .build());
+                .build());*/
         setContentView(R.layout.activity_show_comment);
 
         database = FirebaseDatabase.getInstance();

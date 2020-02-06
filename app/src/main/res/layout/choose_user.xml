@@ -18,6 +18,7 @@
         android:weightSum="1"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
+        android:checkedButton="@id/radioCustomer"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
