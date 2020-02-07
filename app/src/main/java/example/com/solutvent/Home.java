@@ -63,6 +63,7 @@ import example.com.solutvent.Interface.ItemClickListener;
 import example.com.solutvent.Model.Category;
 import example.com.solutvent.Model.Request;
 import example.com.solutvent.Model.Token;
+import example.com.solutvent.Model.User;
 import example.com.solutvent.ViewHolder.MenuViewHolder;
 import io.paperdb.Paper;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
@@ -240,7 +241,18 @@ public class Home extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
-        txtFullName.setText(Common.currentUser.getFirstName());
+        table_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.child(Common.currentUser.getPhone()).getValue(User.class);
+                txtFullName.setText(user.getFirstName());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         recycler_menu = (RecyclerView) findViewById(R.id.recycler_menu);
         recycler_menu.setLayoutManager(new GridLayoutManager(this,2));
@@ -603,6 +615,8 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_update_profile){
             if(Common.currentUser.getIsPlanner().equals("true")){
                 showUpdatePlannerProfileDialog();
+            } else if (Common.currentUser.getIsStaff().equals("true")) {
+                showUpdateAdminProfileDialog();
             } else {
                 showUpdateCustomerProfileDialog();
             }
@@ -661,9 +675,66 @@ public class Home extends AppCompatActivity
         }
     }
 
+    private void showUpdateAdminProfileDialog(){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
+        alertDialog.setTitle("Update Admin Profile");
+        alertDialog.setIcon(R.drawable.ic_person_black_24dp);
+        alertDialog.setMessage("Please fill all information");
+
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View layout_home = inflater.inflate(R.layout.update_admin_profile_layout,null);
+
+        final MaterialEditText updateFirstName = (MaterialEditText)layout_home.findViewById(R.id.edtFirstNameAdmin);
+        final MaterialEditText updateEmail = (MaterialEditText)layout_home.findViewById(R.id.edtEmailAdmin);
+        final MaterialEditText updateAddress = (MaterialEditText)layout_home.findViewById(R.id.edtAddressAdmin);
+        final MaterialEditText updateSecureCode = (MaterialEditText)layout_home.findViewById(R.id.edtSecureCodeAdmin);
+
+        //Set default
+        updateFirstName.setText(Common.currentUser.getFirstName());
+        updateEmail.setText(Common.currentUser.getEmail());
+        updateAddress.setText(Common.currentUser.getAddress());
+        updateSecureCode.setText(Common.currentUser.getSecureCode());
+        alertDialog.setView(layout_home);
+
+        alertDialog.setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                dialog.dismiss();
+
+                if(updateFirstName.getText().toString().trim().length() != 0 &&
+                        updateEmail.getText().toString().trim().length() != 0 &&
+                        updateAddress.getText().toString().trim().length() != 0 &&
+                        updateSecureCode.getText().toString().trim().length() != 0) {
+
+                    //updated
+                    Common.currentUser.setFirstName(updateFirstName.getText().toString());
+                    Common.currentUser.setEmail(updateEmail.getText().toString());
+                    Common.currentUser.setAddress(updateAddress.getText().toString());
+                    Common.currentUser.setSecureCode(updateSecureCode.getText().toString());
+
+                    FirebaseDatabase.getInstance().getReference("User")
+                            .child(Common.currentUser.getPhone())
+                            .setValue(Common.currentUser)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(Home.this,"Profile updated",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                } else {
+                    Toast.makeText(Home.this,"Please fill up all the details",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        alertDialog.show();
+    }
+
     private void showUpdateCustomerProfileDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Update Profile");
+        alertDialog.setTitle("Update Customer Profile");
         alertDialog.setIcon(R.drawable.ic_person_black_24dp);
         alertDialog.setMessage("Please fill all information");
 
@@ -760,7 +831,7 @@ public class Home extends AppCompatActivity
 
     private void showUpdatePlannerProfileDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
-        alertDialog.setTitle("Update Profile");
+        alertDialog.setTitle("Update Planner Profile");
         alertDialog.setIcon(R.drawable.ic_person_black_24dp);
         alertDialog.setMessage("Please fill all information");
 
@@ -921,7 +992,7 @@ public class Home extends AppCompatActivity
                     if(edtPassword.getText().toString().equals(Common.currentUser.getPassword())){
                         if(edtNewPassword.getText().toString().equals(edtRepeatPassword.getText().toString())){
                             Map<String,Object> passwordUpdate = new HashMap<>();
-                            passwordUpdate.put("Password",edtNewPassword.getText().toString());
+                            passwordUpdate.put("password",edtNewPassword.getText().toString());
 
                             DatabaseReference user = FirebaseDatabase.getInstance().getReference("User");
                             user.child(Common.currentUser.getPhone())
