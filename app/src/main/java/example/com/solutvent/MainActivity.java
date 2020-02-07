@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity{
 
     Button btnSignIn,btnSignUp;
     TextView txtSlogan;
-    String Phone,Password, userType="Customer";
+    String Phone,Password, userType="";
     RadioGroup radioGroup;
 
     @Override
@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity{
                         userType = "Planner";
                         break;
                     default:
+                        userType = "";
                         break;
                 }
             }
@@ -217,6 +218,8 @@ public class MainActivity extends AppCompatActivity{
                 } else if (userType.equals("Planner")){
                     Intent signIn = new Intent(MainActivity.this, PlannerReg.class);
                     startActivity(signIn);
+                } else {
+                    Toast.makeText(MainActivity.this,"Please select user type!!", Toast.LENGTH_SHORT).show();
                 }
 
             }
