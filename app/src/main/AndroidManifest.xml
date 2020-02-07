@@ -34,7 +34,6 @@
         <activity
             android:name=".Home"
             android:label="@string/title_activity_home" />
-
         <activity android:name=".EventList" />
         <activity android:name=".EventDetail" />
         <activity android:name=".ShowComment" />
@@ -61,7 +60,8 @@
 
         <activity android:name=".ChattingActivity" />
         <activity android:name=".CustomerReg" />
-        <activity android:name=".PlannerReg"></activity>
+        <activity android:name=".PlannerReg" />
+        <activity android:name=".ManageUser"></activity>
     </application>
 
 </manifest>

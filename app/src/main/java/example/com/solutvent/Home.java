@@ -162,7 +162,7 @@ public class Home extends AppCompatActivity
 
         if (Common.currentUser.getIsStaff().equals("true")){
             addCategory.show();
-            addCategory.hide();
+            //addCategory.hide();
             addCategory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -238,6 +238,11 @@ public class Home extends AppCompatActivity
         } else {
             nav_menu.findItem(R.id.nav_booking_history).setVisible(true);
         }
+
+        if (Common.currentUser.getIsStaff().equals("true"))
+            nav_menu.findItem(R.id.nav_manage_user).setVisible(true);
+        else
+            nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
 
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
@@ -595,9 +600,6 @@ public class Home extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item){
 
         int id = item.getItemId();
-
-
-
         if (id == R.id.nav_menu) {
 
         } else if (id == R.id.nav_booking_history){
@@ -621,6 +623,9 @@ public class Home extends AppCompatActivity
                 showUpdateCustomerProfileDialog();
             }
 
+        } else if (id == R.id.nav_manage_user) {
+            Intent userIntent = new Intent(Home.this,ManageUser.class);
+            startActivity(userIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
