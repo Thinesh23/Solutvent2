@@ -61,7 +61,8 @@
         <activity android:name=".ChattingActivity" />
         <activity android:name=".CustomerReg" />
         <activity android:name=".PlannerReg" />
-        <activity android:name=".ManageUser"></activity>
+        <activity android:name=".ManageUser" />
+        <activity android:name=".HomePlanner"></activity>
     </application>
 
 </manifest>

@@ -169,6 +169,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
                             dataSnapshot1.getRef().removeValue();
+                            Toast.makeText(ManageUser.this, "Booking Deleted !!", Toast.LENGTH_SHORT).show();
                         }
                     }
 
@@ -183,6 +184,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot dataSnapshot1 :dataSnapshot.getChildren()){
                             dataSnapshot1.getRef().removeValue();
+                            Toast.makeText(ManageUser.this, "Booking Deleted !!", Toast.LENGTH_SHORT).show();
                         }
                     }
 

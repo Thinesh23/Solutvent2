@@ -97,14 +97,25 @@ public class SignIn extends AppCompatActivity{
                                     user.setPhone(edtPhone.getText().toString());
 
                                     if (user.getPassword().equals(edtPassword.getText().toString())) {
-                                        Intent eventIntent = new Intent(SignIn.this,Home.class);
-                                        Common.currentUser = user;
-                                        startActivity(eventIntent);
-                                        status("online");
-                                        Toast.makeText(SignIn.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
-                                        finish();
 
-                                        table_user.removeEventListener(this);
+                                        if (user.getIsPlanner().equals("true")){
+                                            Intent eventIntent = new Intent(SignIn.this,HomePlanner.class);
+                                            Common.currentUser = user;
+                                            startActivity(eventIntent);
+                                            status("online");
+                                            Toast.makeText(SignIn.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            table_user.removeEventListener(this);
+                                        } else {
+                                            Intent eventIntent = new Intent(SignIn.this,Home.class);
+                                            Common.currentUser = user;
+                                            startActivity(eventIntent);
+                                            status("online");
+                                            Toast.makeText(SignIn.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            table_user.removeEventListener(this);
+                                        }
+
 
                                     } else {
                                         Toast.makeText(SignIn.this, "Sign In Failed !", Toast.LENGTH_SHORT).show();
