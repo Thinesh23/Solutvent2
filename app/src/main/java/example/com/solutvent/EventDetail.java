@@ -38,7 +38,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
     TextView event_name, event_userContact, event_userEmail, event_address;
     ImageView event_image;
     CollapsingToolbarLayout collapsingToolbarLayout;
-    FloatingActionButton btnRating,btnBooking,btnProfile;
+    FloatingActionButton btnRating,btnBooking,btnMessage;
     RatingBar ratingBar;
     Button btnShowComment;
 
@@ -111,26 +111,14 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
             }
         });
 
-        btnProfile = (FloatingActionButton) findViewById(R.id.btn_show_booking);
-        if(Common.currentUser.getPhone().equals(Common.currentCompany.getPhone())){
-            btnProfile.show();
-            btnProfile.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(EventDetail.this,ShowBooking.class);
-                    intent.putExtra(Common.INTENT_EVENT_ID,eventId);
-                    startActivity(intent);
-                }
-            });
-        } else {
-            btnProfile.hide();
-        }
+        btnMessage = (FloatingActionButton) findViewById(R.id.btn_message);
         btnBooking = (FloatingActionButton) findViewById(R.id.btn_booking);
 
         if(Common.currentUser.getIsPlanner().equals("true") ||
                 Common.currentUser.getIsStaff().equals("true")){
             btnBooking.hide();
             btnRating.hide();
+            btnMessage.hide();
         } else {
             btnRating.show();
             btnRating.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +133,15 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
                 public void onClick(View v) {
                     Intent intent = new Intent(EventDetail.this,BookingActivity2.class);
                     intent.putExtra(Common.INTENT_EVENT_ID,eventId);
+                    startActivity(intent);
+                }
+            });
+            btnMessage.show();
+            btnMessage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(EventDetail.this,ChattingPrivate.class);
+                    intent.putExtra("userId", Common.currentCompany.getPhone());
                     startActivity(intent);
                 }
             });

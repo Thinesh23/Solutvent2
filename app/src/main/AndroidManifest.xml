@@ -63,6 +63,7 @@
         <activity android:name=".PlannerReg" />
         <activity android:name=".ManageUser" />
         <activity android:name=".ShowFeedbackPlanner"/>
+        <activity android:name=".ChattingPrivate"/>
         <activity android:name=".HomePlanner"></activity>
     </application>
 

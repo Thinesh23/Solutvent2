@@ -20,6 +20,7 @@ import java.util.List;
 
 import example.com.solutvent.Adapter.UserAdapter;
 import example.com.solutvent.Common.Common;
+import example.com.solutvent.Model.Chat;
 import example.com.solutvent.Model.Chatlist;
 import example.com.solutvent.Model.User;
 import example.com.solutvent.R;
@@ -31,9 +32,11 @@ public class ChatFragment extends Fragment {
     private UserAdapter userAdapter;
     private List<User> mUsers;
 
-    DatabaseReference reference;
+    DatabaseReference reference,chat;
 
     private List<Chatlist> usersList;
+    private List<String> chats;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,8 +49,31 @@ public class ChatFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         usersList = new ArrayList<>();
-
+        chats = new ArrayList<>();
+        chat = FirebaseDatabase.getInstance().getReference("Chats");
         reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(Common.currentUser.getPhone());
+        chat.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                chats.clear();
+
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()){
+                    Chat chat = snapshot.getValue(Chat.class);
+
+/*                    if (chat.getSender().equals(Common.currentUser.getPhone())){
+                        chats.add(chat.getReceiver());
+                    }*/
+                    if (chat.getReceiver().equals(Common.currentUser.getPhone())){
+                        chats.add(chat.getSender());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -55,6 +81,7 @@ public class ChatFragment extends Fragment {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     Chatlist chatlist = snapshot.getValue(Chatlist.class);
                     usersList.add(chatlist);
+
                 }
 
                 chatList();
@@ -78,8 +105,21 @@ public class ChatFragment extends Fragment {
                 mUsers.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
                     User user = snapshot.getValue(User.class);
-                    if(Common.currentUser != null){
-                        if(!user.getPhone().equals(Common.currentUser.getPhone())){
+                    for (Chatlist chatlist : usersList){
+                        if (Common.currentUser != null && Common.currentUser.getIsStaff().equals("true")){
+                            if (!user.getPhone().equals(Common.currentUser.getPhone())) {
+                                mUsers.add(user);
+                            }
+                        } else {
+                            if (user.getPhone() != null && user.getPhone().equals(chatlist.getId())){
+                                mUsers.add(user);
+                            }
+                        }
+
+                    }
+
+                    for (String phone : chats){
+                        if (user.getPhone() != null && user.getPhone().equals(phone) && !mUsers.contains(user)){
                             mUsers.add(user);
                         }
                     }

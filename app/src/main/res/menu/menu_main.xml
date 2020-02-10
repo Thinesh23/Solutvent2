@@ -9,10 +9,10 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_message"
+        android:id="@+id/message_admin"
         android:orderInCategory="300"
-        android:title="Message"
-        android:icon="@drawable/ic_mail_black_24dp"
+        android:title="Contact Admin"
+        android:icon="@drawable/ic_contacts_black_24dp"
         app:showAsAction="ifRoom" />
 
 </menu>

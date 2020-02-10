@@ -102,6 +102,7 @@ public class HomePlanner extends AppCompatActivity
 
     String stateName = "";
     List<String> stateList = new ArrayList<>();
+    String adminPhone = "";
 
 
     Category newCategory;
@@ -139,6 +140,23 @@ public class HomePlanner extends AppCompatActivity
         stateList.add("Choose State");
         stateList.add("KL");
         stateList.add("Selangor");
+
+        table_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) { ;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user.getIsStaff().equals("true")){
+                        adminPhone = user.getPhone();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         Query query = request.orderByChild("plannerPhone").equalTo(Common.currentUser.getPhone());
 
@@ -416,8 +434,9 @@ public class HomePlanner extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId() == R.id.refresh) {
             loadMenu();
-        } else if (item.getItemId() == R.id.action_message){
-            Intent chatIntent = new Intent(HomePlanner.this,ChattingMenu.class);
+        } else if (item.getItemId() == R.id.message_admin){
+            Intent chatIntent = new Intent(HomePlanner.this,ChattingPrivate.class);
+            chatIntent.putExtra("userId",adminPhone);
             startActivity(chatIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -450,7 +469,11 @@ public class HomePlanner extends AppCompatActivity
         } else if (id == R.id.nav_manage_user) {
             Intent userIntent = new Intent(HomePlanner.this,ManageUser.class);
             startActivity(userIntent);
+        } else if (item.getItemId() == R.id.nav_message){
+            Intent chatIntent = new Intent(HomePlanner.this,ChattingMenu.class);
+            startActivity(chatIntent);
         }
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

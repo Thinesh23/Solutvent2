@@ -93,6 +93,7 @@ public class Home extends AppCompatActivity
 
     String stateName = "";
     List<String> stateList = new ArrayList<>();
+    String adminPhone = "";
 
 
     Category newCategory;
@@ -116,6 +117,7 @@ public class Home extends AppCompatActivity
         setContentView(R.layout.activity_home);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Menu");
+
         addCategory = (FloatingActionButton) findViewById(R.id.btn_category);
 
         database = FirebaseDatabase.getInstance();
@@ -130,6 +132,23 @@ public class Home extends AppCompatActivity
         stateList.add("Choose State");
         stateList.add("KL");
         stateList.add("Selangor");
+
+        table_user.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) { ;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    User user = snapshot.getValue(User.class);
+                    if (user.getIsStaff().equals("true")){
+                        adminPhone = user.getPhone();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         FirebaseRecyclerOptions<Category> options = new FirebaseRecyclerOptions.Builder<Category>()
                 .setQuery(category,Category.class)
@@ -588,6 +607,13 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu (Menu menu) {
         getMenuInflater().inflate(R.menu.home,menu);
+
+        MenuItem item = menu.findItem(R.id.message_admin);
+        if (Common.currentUser.getIsStaff().equals("true")){
+            item.setVisible(false);
+        } else {
+            item.setVisible(true);
+        }
         return true;
     }
 
@@ -595,8 +621,9 @@ public class Home extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item){
         if(item.getItemId() == R.id.refresh) {
             loadMenu();
-        } else if (item.getItemId() == R.id.action_message){
-            Intent chatIntent = new Intent(Home.this,ChattingMenu.class);
+        } else if (item.getItemId() == R.id.message_admin){
+            Intent chatIntent = new Intent(Home.this,ChattingPrivate.class);
+            chatIntent.putExtra("userId",adminPhone);
             startActivity(chatIntent);
         }
         return super.onOptionsItemSelected(item);
@@ -633,6 +660,9 @@ public class Home extends AppCompatActivity
         } else if (id == R.id.nav_manage_user) {
             Intent userIntent = new Intent(Home.this,ManageUser.class);
             startActivity(userIntent);
+        } else if (item.getItemId() == R.id.nav_message){
+            Intent chatIntent = new Intent(Home.this,ChattingMenu.class);
+            startActivity(chatIntent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
