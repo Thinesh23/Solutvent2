@@ -1,10 +1,13 @@
 package example.com.solutvent;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Path;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,8 +22,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -29,11 +37,14 @@ import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Query.*;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -41,6 +52,7 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -88,7 +100,10 @@ public class EventList extends AppCompatActivity {
     FirebaseRecyclerAdapter<User,CompanyViewHolder> adapter;
     FirebaseRecyclerAdapter<User,CompanyViewHolder> searchAdapter;
     List<String> suggestList = new ArrayList<>();
+    List<User> eventList = new ArrayList<>();
     MaterialSearchBar materialSearchBar;
+
+    ImageView filter_tag;
 
     //Facebook Share
     CallbackManager callbackManager;
@@ -311,10 +326,13 @@ public class EventList extends AppCompatActivity {
     private void loadListEvent(String categoryId){
 
         //Create query by category Id
-        Query searchByName = companyList.orderByChild("menuId").equalTo(categoryId);
+
+        Query search = companyList.orderByChild("menuId").equalTo(categoryId);
+
+
         //Create options with query
         FirebaseRecyclerOptions<User> companyOptions = new FirebaseRecyclerOptions.Builder<User>()
-                .setQuery(searchByName,User.class)
+                .setQuery(search, User.class)
                 .build();
 
         adapter = new FirebaseRecyclerAdapter<User, CompanyViewHolder>(companyOptions) {
@@ -368,4 +386,5 @@ public class EventList extends AppCompatActivity {
             searchAdapter.stopListening();
         }
     }
+
 }

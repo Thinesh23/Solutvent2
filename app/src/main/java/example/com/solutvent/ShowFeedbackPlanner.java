@@ -23,7 +23,7 @@ import example.com.solutvent.ViewHolder.ShowCommentViewHolder;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class ShowComment extends AppCompatActivity{
+public class ShowFeedbackPlanner extends AppCompatActivity{
 
     RecyclerView recyclerView;
     RecyclerView.LayoutManager layoutManager;
@@ -71,7 +71,7 @@ public class ShowComment extends AppCompatActivity{
             @Override
             public void onRefresh() {
                 if(Common.currentUser != null) {
-                    Query query = ratingTbl.orderByChild("eventId").equalTo(eventId);
+                    Query query = ratingTbl.orderByChild("eventId").equalTo(Common.currentUser.getPhone());
 
                     FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
                             .setQuery(query,Rating.class)
@@ -104,7 +104,7 @@ public class ShowComment extends AppCompatActivity{
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
                 if(Common.currentUser != null) {
-                    Query query = ratingTbl.orderByChild("eventId").equalTo(eventId);
+                    Query query = ratingTbl.orderByChild("eventId").equalTo(Common.currentUser.getPhone());
 
                     FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
                             .setQuery(query,Rating.class)

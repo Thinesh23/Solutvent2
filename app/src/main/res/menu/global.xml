@@ -20,6 +20,12 @@
             android:title="Manage Users" />
 
         <item
+            android:id="@+id/nav_show_feedback"
+            android:icon="@drawable/ic_feedback_black_24dp"
+            android:iconTint="@android:color/white"
+            android:title="User Feedback" />
+
+        <item
             android:id="@+id/nav_booking_history"
             android:icon="@drawable/ic_access_time_black_24dp"
             android:iconTint="@android:color/white"

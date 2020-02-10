@@ -233,16 +233,23 @@ public class Home extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         Menu nav_menu = navigationView.getMenu();
-        if(Common.currentUser.getIsPlanner().equals("true") || Common.currentUser.getIsStaff().equals("true")){
+        if(Common.currentUser.getIsPlanner().equals("true")){
             nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
-        } else {
-            nav_menu.findItem(R.id.nav_booking_history).setVisible(true);
-        }
-
-        if (Common.currentUser.getIsStaff().equals("true"))
-            nav_menu.findItem(R.id.nav_manage_user).setVisible(true);
-        else
+            nav_menu.findItem(R.id.nav_show_feedback).setVisible(true);
             nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
+        } else {
+
+            if (Common.currentUser.getIsStaff().equals("true")) {
+                nav_menu.findItem(R.id.nav_manage_user).setVisible(true);
+                nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
+                nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
+            }
+            else {
+                nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
+                nav_menu.findItem(R.id.nav_booking_history).setVisible(true);
+                nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
+            }
+        }
 
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);

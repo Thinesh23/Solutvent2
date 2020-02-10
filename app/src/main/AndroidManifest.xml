@@ -62,6 +62,7 @@
         <activity android:name=".CustomerReg" />
         <activity android:name=".PlannerReg" />
         <activity android:name=".ManageUser" />
+        <activity android:name=".ShowFeedbackPlanner"/>
         <activity android:name=".HomePlanner"></activity>
     </application>
 
