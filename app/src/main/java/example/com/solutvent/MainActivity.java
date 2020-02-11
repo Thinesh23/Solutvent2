@@ -135,13 +135,24 @@ public class MainActivity extends AppCompatActivity{
                         user.setPhone(Phone);
 
                         if (user.getPassword().equals(Password)) {
-                            Intent eventIntent = new Intent(MainActivity.this, Home.class);
-                            Common.currentUser = user;
-                            status("online");
-                            startActivity(eventIntent);
-                            Toast.makeText(MainActivity.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
-                            finish();
 
+                            if (user.getIsPlanner().equals("true")){
+                                Intent eventIntent = new Intent(MainActivity.this,HomePlanner.class);
+                                Common.currentUser = user;
+                                startActivity(eventIntent);
+                                status("online");
+                                Toast.makeText(MainActivity.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
+                                finish();
+                                table_user.removeEventListener(this);
+                            } else {
+                                Intent eventIntent = new Intent(MainActivity.this,Home.class);
+                                Common.currentUser = user;
+                                startActivity(eventIntent);
+                                status("online");
+                                Toast.makeText(MainActivity.this, "Sign In Successful !", Toast.LENGTH_SHORT).show();
+                                finish();
+                                table_user.removeEventListener(this);
+                            }
                         } else {
                             Toast.makeText(MainActivity.this, "Sign In Failed !", Toast.LENGTH_SHORT).show();
                         }
