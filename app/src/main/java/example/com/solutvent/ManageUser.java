@@ -63,6 +63,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //make sure that the current user is staff then only able to delete
                 if(Common.currentUser.getIsStaff().equals("true")){
                     Query query = table_user.orderByChild("isStaff").equalTo("false");
 
@@ -70,6 +71,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
                             .setQuery(query,User.class)
                             .build();
 
+                    //displays the data from user table to the layout text field
                     adapter = new FirebaseRecyclerAdapter<User, ShowUserViewHolder>(options) {
                         @Override
                         protected void onBindViewHolder(@NonNull ShowUserViewHolder holder, int position, @NonNull User model) {
@@ -130,6 +132,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
         });
     }
 
+    //make sure adapter knows when a data is deleted and notify the adapter
     private void loadUser(){
         adapter.startListening();
         adapter.notifyDataSetChanged();
@@ -144,6 +147,7 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
         }
     }
 
+    //when the context is selected then current user will be deleted
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         if(Common.currentUser.getIsStaff().equals("true")){
@@ -159,7 +163,9 @@ public class ManageUser extends AppCompatActivity implements RecyclerItemTouchHe
         return super.onContextItemSelected(item);
     }
 
+    //delete user
     private void deleteUser(final String key) {
+        //when user is deleted from user table, we make sure we remove their details from request table as well.
         table_user.child(key).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

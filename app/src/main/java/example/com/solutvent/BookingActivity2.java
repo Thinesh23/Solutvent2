@@ -39,7 +39,7 @@ public class BookingActivity2 extends AppCompatActivity {
     @BindView(R.id.btn_next_step)
     Button btn_next_step;
 
-    //Event
+    //Next click and previous click is tracked between two fragment using viewpager
     @OnClick(R.id.btn_previous_step)
     void previousClick(){
         if(Common.step > 0){
@@ -137,6 +137,7 @@ public class BookingActivity2 extends AppCompatActivity {
         });
     }
 
+    //set button color when it is disabled and enabled
     private void setColorButton(){
         if(btn_next_step.isEnabled()){
             btn_next_step.setBackgroundResource(R.color.btnSignIn);

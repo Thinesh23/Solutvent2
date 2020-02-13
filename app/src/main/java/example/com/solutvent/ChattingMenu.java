@@ -43,6 +43,7 @@ public class ChattingMenu extends AppCompatActivity {
         table_chat.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                //update the chat text if more unread message comes in
                 ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
                 int unread = 0;
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()){
@@ -52,12 +53,14 @@ public class ChattingMenu extends AppCompatActivity {
                     }
                 }
 
+                //update unread chats
                 if(unread == 0){
                     viewPagerAdapter.addFragment(new ChatFragment(), "Chats");
                 } else {
                     viewPagerAdapter.addFragment(new ChatFragment(), "("+unread+")Chats");
                 }
 
+                //disable user fragment as not required in this app
                 //viewPagerAdapter.addFragment(new UsersFragment(), "Users");
 
                 viewPager.setAdapter(viewPagerAdapter);
@@ -75,6 +78,7 @@ public class ChattingMenu extends AppCompatActivity {
 
     }
 
+    //Pager adapter for fragment attachment and selection.
     class ViewPagerAdapter extends FragmentPagerAdapter{
 
         private ArrayList <Fragment> fragments;

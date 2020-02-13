@@ -251,6 +251,7 @@ public class Home extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //show and hide based on customer login/admin login or planner login
         Menu nav_menu = navigationView.getMenu();
         if(Common.currentUser.getIsPlanner().equals("true")){
             nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
@@ -270,6 +271,8 @@ public class Home extends AppCompatActivity
             }
         }
 
+        //display name on the header view, get the name from database instead of
+        //current user because data is only updated when user sign out and login back
         View headerView = navigationView.getHeaderView(0);
         txtFullName = (TextView) headerView.findViewById(R.id.txtFullName);
         table_user.addValueEventListener(new ValueEventListener() {
@@ -291,10 +294,13 @@ public class Home extends AppCompatActivity
                 R.anim.layout_fall_down);
         recycler_menu.setLayoutAnimation(controller);
 
+        //token is used for sending notifications
+        //unique to every phone
         updateToken(FirebaseInstanceId.getInstance().getToken());
 
     }
 
+    //admin can add new category
     private void ShowAddCategoryDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Add new Category");
@@ -460,6 +466,7 @@ public class Home extends AppCompatActivity
         Toast.makeText(this, "Category Deleted !!", Toast.LENGTH_SHORT).show();
     }
 
+    //update category image, name
     private void showUpdateDialog(final String key, final Category item) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Update Category");
@@ -558,6 +565,7 @@ public class Home extends AppCompatActivity
     }
 
 
+    //update token when new user added
     private void updateToken(String token){
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference tokens = db.getReference("Tokens");
@@ -629,6 +637,7 @@ public class Home extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    //drawer at the left and it's options
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item){
@@ -717,6 +726,7 @@ public class Home extends AppCompatActivity
         }
     }
 
+    //admin update details
     private void showUpdateAdminProfileDialog(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Update Admin Profile");
@@ -774,6 +784,7 @@ public class Home extends AppCompatActivity
         alertDialog.show();
     }
 
+    //customer update
     private void showUpdateCustomerProfileDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Update Customer Profile");
@@ -832,6 +843,7 @@ public class Home extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Toast.makeText(Home.this,"Profile updated",Toast.LENGTH_SHORT).show();
+                                    //if profile update successful, then update the details of the customer in the booking as well
                                     table_request.orderByChild("customerPhone").equalTo(Common.currentUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -871,6 +883,7 @@ public class Home extends AppCompatActivity
         alertDialog.show();
     }
 
+    //update planner details
     private void showUpdatePlannerProfileDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("Update Planner Profile");
@@ -954,6 +967,7 @@ public class Home extends AppCompatActivity
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     Toast.makeText(Home.this,"Profile updated",Toast.LENGTH_SHORT).show();
+                                    //if profile update successful, then update the details of the planner in the booking as well
                                     table_request.orderByChild("plannerPhone").equalTo(Common.currentUser.getPhone()).addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -1007,6 +1021,7 @@ public class Home extends AppCompatActivity
 
     }
 
+    //change password function,logics are the same with all the previous explanations in login/sign up
     private void showChangePasswordDialog(){
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(Home.this);
         alertDialog.setTitle("CHANGE PASSWORD");

@@ -108,6 +108,7 @@ public class BookingHistory extends AppCompatActivity {
             @Override
             public void onRefresh() {
 
+                //load history when user not null
                 if(Common.currentUser !=null){
                     loadHistory();
                 }
@@ -128,6 +129,8 @@ public class BookingHistory extends AppCompatActivity {
 
     }
 
+    //load history to recycler view. Query is used to add the details to the firebase recycler adapter
+    //all the values of the text field will be set according to the value from firebase table
    private void loadHistory(){
        Query getOrderByUser = requests.orderByChild("customerPhone").equalTo(Common.currentUser.getPhone());
        FirebaseRecyclerOptions<Request> orderOptions = new FirebaseRecyclerOptions.Builder<Request>()
@@ -142,6 +145,7 @@ public class BookingHistory extends AppCompatActivity {
                viewHolder.txt_booking_name.setText(model.getPlannerCompanyName());
                viewHolder.txt_booking_time.setText(model.getTime());
 
+               //if status is 100% then only btn confirm can be clicked and it will call payment else the btn is hidden
                if (viewHolder.txt_booking_status.getText().equals("100% Complete")){
                    viewHolder.txt_booking_payment.setVisibility(View.VISIBLE);
                    viewHolder.txt_booking_payment.setText("Total: RM " + model.getPayment());
@@ -176,6 +180,7 @@ public class BookingHistory extends AppCompatActivity {
        loadComment();
     }
 
+    //Confirm payment using MYR currency, this will call the paypall activity
     private void confirmPayment(String payment){
         String formatAmount = payment
                 .replace("RM","")
@@ -191,6 +196,7 @@ public class BookingHistory extends AppCompatActivity {
         startActivityForResult(intent,PAYPAL_REQUEST_CODE);
     }
 
+    //calls paypal payment activity. track based onrequest code to see if success or fail.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PAYPAL_REQUEST_CODE) {
@@ -202,6 +208,7 @@ public class BookingHistory extends AppCompatActivity {
                         final JSONObject jsonObject = new JSONObject(paymentDetail);
                         final String response = jsonObject.getJSONObject("response").getString("state");
 
+                        //update the table when the payment is successful
                         requests.child(bookingid).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -241,6 +248,7 @@ public class BookingHistory extends AppCompatActivity {
         }
     }
 
+    //sends notification to planner when payment is made
     private void sendNotification(){
         DatabaseReference tokens = database.getReference("Tokens");
         tokens.orderByKey().equalTo(currentRequest.getPlannerPhone())
@@ -293,6 +301,7 @@ public class BookingHistory extends AppCompatActivity {
         adapter.stopListening();
     }
 
+    //get status of the booking and convert it to string
     private String convertCodeToStatus(String status) {
         if(status.equals("6"))
             return "Completed";

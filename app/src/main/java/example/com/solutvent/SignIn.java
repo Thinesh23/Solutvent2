@@ -71,6 +71,7 @@ public class SignIn extends AppCompatActivity{
 
                 if(Common.isConnectedToInternet(getBaseContext())){
 
+                    //if remember me clicked then save the entered data to paper book database
                     if(ckbRemember.isChecked()){
                         Paper.book().write(Common.USER_KEY,edtPhone.getText().toString());
                         Paper.book().write(Common.PWD_KEY,edtPassword.getText().toString());
@@ -86,16 +87,20 @@ public class SignIn extends AppCompatActivity{
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
 
+                            //make sure both phone & password not empty
                             if(edtPhone.getText().toString().isEmpty() || edtPassword.getText().toString().isEmpty()){
                                 mDialog.dismiss();
                                 Toast.makeText(SignIn.this, "Please fill up all the details !", Toast.LENGTH_SHORT).show();
                             } else {
+                                //if key  = entered phone number then only compare password else user doesnt exist
                                 if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
                                     mDialog.dismiss();
 
+                                    //take user table child and save to user object class
                                     User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
                                     user.setPhone(edtPhone.getText().toString());
 
+                                    //if password correct login to home page
                                     if (user.getPassword().equals(edtPassword.getText().toString())) {
 
                                         if (user.getIsPlanner().equals("true")){
@@ -142,6 +147,7 @@ public class SignIn extends AppCompatActivity{
         });
     }
 
+    //track status
     private void status (String status){
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -159,6 +165,7 @@ public class SignIn extends AppCompatActivity{
 
     }
 
+    //forgot password popup dialog
     private void  showForgotPwdDialog(){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -181,9 +188,11 @@ public class SignIn extends AppCompatActivity{
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                        //check if phone number exist
                         if (dataSnapshot.child(edtPhone.getText().toString()).exists()) {
                             User user = dataSnapshot.child(edtPhone.getText().toString()).getValue(User.class);
 
+                            //if secure code is correct then show password
                             if (user.getSecureCode().equals(edtSecureCode.getText().toString()))
                                 Toast.makeText(SignIn.this, "Your password : " + user.getPassword(), Toast.LENGTH_SHORT).show();
                             else

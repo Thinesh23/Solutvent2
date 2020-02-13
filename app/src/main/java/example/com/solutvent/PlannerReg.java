@@ -86,6 +86,7 @@ public class PlannerReg extends AppCompatActivity {
         stateList.add("KL");
         stateList.add("Selangor");
 
+        //take the category from database and save to spinner(drop down selection) for user to choose
         table_category.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -104,6 +105,7 @@ public class PlannerReg extends AppCompatActivity {
             }
         });
 
+        //save the selected category to a string
         category_select.setItems(categoryNameList);
         category_select.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -111,6 +113,7 @@ public class PlannerReg extends AppCompatActivity {
                 categoryName = item.toString();
             }
         });
+        //save the selected state to a string
         state_select.setItems(stateList);
         state_select.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
@@ -124,7 +127,7 @@ public class PlannerReg extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(Common.isConnectedToInternet(getBaseContext())) {
-
+                    //if not empty then call upload image function
                     if (edtPlanName.getText().toString().trim().length() != 0 &&
                             edtPlanAddress.getText().toString().trim().length() != 0 &&
                             edtPlanEmail.getText().toString().trim().length() != 0 &&
@@ -147,6 +150,7 @@ public class PlannerReg extends AppCompatActivity {
         });
     }
 
+    //function to save image to firebase storage
     private void uploadImage() {
         if (saveUri != null) {
             final ProgressDialog mDialog = new ProgressDialog(this);
@@ -217,6 +221,7 @@ public class PlannerReg extends AppCompatActivity {
         }
     }
 
+    //update the text on btn select button when user selected an image
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -229,6 +234,7 @@ public class PlannerReg extends AppCompatActivity {
         }
     }
 
+    //choose image from phone
     private void chooseImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -276,11 +282,15 @@ public class PlannerReg extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                        //if the boolean for image is selected, image is uploaded equal to true and category id not empty then
+                        //only register the user
                         if(imageSelect && imageUpload && !categoryId.isEmpty()) {
 
+                            //check if phone number exist, when not exist then only register
                             if (dataSnapshot.child(edtPlanPhone.getText().toString()).exists()) {
                                 Toast.makeText(PlannerReg.this, "Phone number already exist", Toast.LENGTH_SHORT).show();
                             } else {
+                                //make sure user object has no null value
                                 if (newUser != null) {
                                     table_user.child(edtPlanPhone.getText().toString()).setValue(newUser);
                                     Toast.makeText(PlannerReg.this,"Account Registered",Toast.LENGTH_SHORT).show();

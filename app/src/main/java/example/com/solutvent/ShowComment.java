@@ -70,6 +70,8 @@ public class ShowComment extends AppCompatActivity{
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //make sure current user not null then only load the comments into the recycle view
+                //using firebaserecycler
                 if(Common.currentUser != null) {
                     Query query = ratingTbl.orderByChild("eventId").equalTo(eventId);
 

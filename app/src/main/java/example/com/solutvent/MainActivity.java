@@ -86,15 +86,17 @@ public class MainActivity extends AppCompatActivity{
             }
         });
 
-
+        //Paper book is a nosql database, taking saved user data for auto login
         String user = Paper.book().read(Common.USER_KEY);
         String pwd = Paper.book().read(Common.PWD_KEY);
+        //if user saved data then use auto login
         if(user != null && pwd != null){
             if(!user.isEmpty() && !pwd.isEmpty())
                 login(user,pwd);
         }
     }
 
+    //Function to print hash key in the logcat for reference
     private void printKeyHash() {
         try{
             PackageInfo info = getPackageManager().getPackageInfo("example.com.solutvent",
@@ -111,6 +113,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    //autologin func
     private void login(String phone, String pwd){
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -123,17 +126,20 @@ public class MainActivity extends AppCompatActivity{
             final ProgressDialog mDialog = new ProgressDialog(MainActivity.this);
             mDialog.setMessage("Please Wait");
             mDialog.show();
-
+            //opens database but only update once, single value event
             table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
+                    //if key exist then only we compare password else user doesnt exist
                     if (dataSnapshot.child(Phone).exists()) {
                         mDialog.dismiss();
 
+                        //take the snapshot of User table and save to user object
                         User user = dataSnapshot.child(Phone).getValue(User.class);
                         user.setPhone(Phone);
 
+                        //if password correct then only opens the Home page for vendor or customer/admin
                         if (user.getPassword().equals(Password)) {
 
                             if (user.getIsPlanner().equals("true")){
@@ -174,6 +180,7 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    //function to update user status, offline or online
     private void status (String status){
 
         HashMap<String, Object> hashMap = new HashMap<>();
@@ -191,6 +198,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    //function to show dialog when user click sign up
     private void showChooseUser() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
         alertDialog.setTitle("Choose User");
@@ -201,6 +209,7 @@ public class MainActivity extends AppCompatActivity{
         View layout_home = inflater.inflate(R.layout.choose_user, null);
 
         radioGroup = (RadioGroup) layout_home.findViewById(R.id.user_select);
+        //switch between customer/planner and save to a string
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -223,6 +232,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
+                //use the string to open customer register page/ planner register page
                 if (userType.equals("Customer")){
                     Intent signIn = new Intent(MainActivity.this, CustomerReg.class);
                     startActivity(signIn);

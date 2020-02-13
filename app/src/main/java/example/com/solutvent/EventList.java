@@ -171,9 +171,11 @@ public class EventList extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //when intent data from previous activity not null then save it to this string
                 if(getIntent() != null){
                     categoryId = getIntent().getStringExtra("CategoryId");
                 }
+                //if selected category id not null then only load the planner list
                 if (!categoryId.isEmpty() && categoryId != null){
                     if(Common.isConnectedToInternet(getBaseContext())){
                         loadListEvent(categoryId);
@@ -186,7 +188,7 @@ public class EventList extends AppCompatActivity {
 
             }
         });
-
+        //Thread to load user on first launch
         swipeRefreshLayout.post(new Runnable() {
             @Override
             public void run() {
@@ -202,9 +204,9 @@ public class EventList extends AppCompatActivity {
                     }
 
                 }
-                //Search
+                //Search bar
                 materialSearchBar = (MaterialSearchBar)findViewById(R.id.searchBar);
-                materialSearchBar.setHint("Enter your event");
+                materialSearchBar.setHint("Enter planner name");
                 loadSuggest();
                 materialSearchBar.setCardViewElevation(10);
                 materialSearchBar.addTextChangeListener(new TextWatcher() {
@@ -213,6 +215,7 @@ public class EventList extends AppCompatActivity {
 
                     }
 
+                    //search from suggestlist and then load the entered planner name
                     @Override
                     public void onTextChanged(CharSequence s, int start, int before, int count) {
                         List<String> suggest = new ArrayList<String>();
@@ -263,6 +266,7 @@ public class EventList extends AppCompatActivity {
         }
     }
 
+    //function to take data from firebase and load it when the user start search
     private void startSearch(CharSequence text) {
         //create query by name
         Query searchByName = companyList.orderByChild("firstName").equalTo(text.toString());
@@ -305,6 +309,9 @@ public class EventList extends AppCompatActivity {
         recyclerView.setAdapter(searchAdapter);
     }
 
+    //get all the planner with the selected category and add their names to the suggest list
+    //this is to avoid other category names to be added to the list
+    //later we will use suggest list for the search.
     private void loadSuggest(){
         companyList.orderByChild("menuId").equalTo(categoryId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -326,9 +333,7 @@ public class EventList extends AppCompatActivity {
     private void loadListEvent(String categoryId){
 
         //Create query by category Id
-
         Query search = companyList.orderByChild("menuId").equalTo(categoryId);
-
 
         //Create options with query
         FirebaseRecyclerOptions<User> companyOptions = new FirebaseRecyclerOptions.Builder<User>()

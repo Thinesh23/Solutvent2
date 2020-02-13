@@ -86,9 +86,11 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.ExpandedAppbar);
         collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.CollapsedAppbar);
 
+        //make sure intent sent from previous activity is not null
         if(getIntent() != null){
             eventId = getIntent().getStringExtra("eventId");
         }
+        //if event id not null then only we load the functions
         if (!eventId.isEmpty()){
 
             if(Common.isConnectedToInternet(getApplicationContext())) {
@@ -114,6 +116,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         btnMessage = (FloatingActionButton) findViewById(R.id.btn_message);
         btnBooking = (FloatingActionButton) findViewById(R.id.btn_booking);
 
+        //Hide or show based on current user type
         if(Common.currentUser.getIsPlanner().equals("true") ||
                 Common.currentUser.getIsStaff().equals("true")){
             btnBooking.hide();
@@ -148,6 +151,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         }
     }
 
+    //function to show the pop up rating dialog
     private void showRatingDialog(){
         new AppRatingDialog.Builder()
                 .setPositiveButtonText("Submit")
@@ -166,6 +170,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
                 .show();
     }
 
+    //load the selected planner to the collapsing toolbar layout and set the text fields.
     private void getDetailEvent(String eventId){
         planner.child(eventId).addValueEventListener(new ValueEventListener() {
             @Override
@@ -189,6 +194,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
         });
     }
 
+    //get the rating detail from database and load it
     private void getRatingEvent(String eventId){
         com.google.firebase.database.Query eventRating = ratingTbl.orderByChild("eventId").equalTo(eventId);
         eventRating.addValueEventListener(new ValueEventListener() {
@@ -200,6 +206,7 @@ public class EventDetail extends AppCompatActivity implements RatingDialogListen
                     sum+=Integer.parseInt(item.getRateValue());
                     count++;
                 }
+                //add all the rating and average them
                 if(count != 0){
                     float average = sum/count;
                     ratingBar.setRating(average);

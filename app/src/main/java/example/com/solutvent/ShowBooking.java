@@ -95,9 +95,11 @@ public class ShowBooking extends AppCompatActivity{
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                //make sure intent data is not null thensave it to a string
                 if(getIntent()!=null){
                     eventId = getIntent().getStringExtra(Common.INTENT_EVENT_ID);
                 }
+                //make sure current planner company details not null then only call load bookings
                 if(Common.currentCompany !=null){
                     loadBookings();
                 }

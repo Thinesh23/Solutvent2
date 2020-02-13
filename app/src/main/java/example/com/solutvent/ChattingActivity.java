@@ -91,6 +91,7 @@ public class ChattingActivity extends AppCompatActivity {
         intent = getIntent();
         userId = intent.getStringExtra("userId");
 
+        //clicks send button, make sure message not empty before sending.
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,6 +126,7 @@ public class ChattingActivity extends AppCompatActivity {
         seenMessage(userId);
     }
 
+    //update when message is seen
     private void seenMessage(final String userId){
         DatabaseReference table_chat = FirebaseDatabase.getInstance().getReference("Chats");
         seenListener = table_chat.addValueEventListener(new ValueEventListener() {
@@ -147,6 +149,7 @@ public class ChattingActivity extends AppCompatActivity {
         });
     }
 
+    //send message
     private void sendMessage (String sender, String receiver, String message){
 
         DatabaseReference chatmessage = FirebaseDatabase.getInstance().getReference();
@@ -157,6 +160,7 @@ public class ChattingActivity extends AppCompatActivity {
         hashMap.put("message", message);
         hashMap.put("isSeen",false);
 
+        //set the hashmap value to the child in chat table
         chatmessage.child("Chats").push().setValue(hashMap);
 
         final DatabaseReference chatRef = FirebaseDatabase.getInstance().getReference("Chatlist")
@@ -164,6 +168,7 @@ public class ChattingActivity extends AppCompatActivity {
                 .child(userId);
         chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
+            //set the id of the receiver under sender in chatlist
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     chatRef.child("id").setValue(userId);
@@ -182,6 +187,7 @@ public class ChattingActivity extends AppCompatActivity {
         notify = false;
     }
 
+    //send notification using FCM (firebase cloud messaging)
     private void sendNotification(String receiver, final String name, final String message){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference tokens = database.getReference("Tokens");
@@ -192,6 +198,7 @@ public class ChattingActivity extends AppCompatActivity {
                         for (DataSnapshot postSnapShot:dataSnapshot.getChildren()){
                             Token token = postSnapShot.getValue(Token.class);
 
+                            //check the token and send the message to the receiver
                             Map<String,String> dataSend = new HashMap<>();
                             dataSend.put("title","New Message");
                             dataSend.put("message", message + " from " + name);
@@ -221,6 +228,7 @@ public class ChattingActivity extends AppCompatActivity {
                 });
     }
 
+    //function to read message
     private void readMessages (final String myid, final String userid){
         mchats = new ArrayList<>();
 
@@ -229,6 +237,8 @@ public class ChattingActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mchats.clear();
+                //add chats to the layout and set them to left and right
+                //based on receiver and sender
                 for(DataSnapshot data : dataSnapshot.getChildren()){
                     Chat chat = data.getValue(Chat.class);
                     if(chat.getReceiver().equals(myid) && chat.getSender().equals(userid) ||

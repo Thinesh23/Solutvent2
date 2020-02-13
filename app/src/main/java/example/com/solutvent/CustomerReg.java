@@ -46,11 +46,13 @@ public class CustomerReg extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         final DatabaseReference table_user = database.getReference("User");
 
+        //set material spinner location
         stateList.add("Choose State");
         stateList.add("KL");
         stateList.add("Selangor");
 
         state_select.setItems(stateList);
+        //save the selected spinner item to a string
         state_select.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
@@ -72,6 +74,7 @@ public class CustomerReg extends AppCompatActivity {
                     table_user.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                            //check if all the text field is not empty
                             if(edtCustName.getText().toString().trim().length() != 0 &&
                                     edtCustAddress.getText().toString().trim().length() != 0 &&
                                     edtCustEmail.getText().toString().trim().length() != 0 &&
@@ -80,6 +83,7 @@ public class CustomerReg extends AppCompatActivity {
                                     edtCustSecureCode.getText().toString().trim().length() != 0 &&
                                     !stateName.equals("Choose State")) {
 
+                                //if user phone exist then dont register
                                 if (dataSnapshot.child(edtCustPhone.getText().toString()).exists()) {
                                     mDialog.dismiss();
                                     Toast.makeText(CustomerReg.this, "Phone number already exist", Toast.LENGTH_SHORT).show();
@@ -120,7 +124,7 @@ public class CustomerReg extends AppCompatActivity {
             }
         });
     }
-
+    //back button will terminate this activity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
