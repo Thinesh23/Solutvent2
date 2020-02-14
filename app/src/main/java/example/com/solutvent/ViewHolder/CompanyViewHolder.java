@@ -11,8 +11,7 @@ import example.com.solutvent.Interface.ItemClickListener;
 import example.com.solutvent.R;
 
 public class CompanyViewHolder extends RecyclerView.ViewHolder implements
-        View.OnClickListener,
-        View.OnCreateContextMenuListener{
+        View.OnClickListener{
 
     public TextView event_name,event_booking,package_price, state_location;
     public ImageView event_image,fav_image,share_image,quick_cart;
@@ -32,7 +31,6 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder implements
         //quick_cart = (ImageView) itemView.findViewById(R.id.btn_quick_cart);
 
         itemView.setOnClickListener(this);
-        itemView.setOnCreateContextMenuListener(this);
     }
 
     public void setItemClickListener(ItemClickListener itemClickListener) {
@@ -44,11 +42,4 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder implements
         itemClickListener.onClick(view,getAdapterPosition(),false);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
-        contextMenu.setHeaderTitle("Select the action");
-
-        contextMenu.add(0,0,getAdapterPosition(), Common.UPDATE);
-        contextMenu.add(0,0,getAdapterPosition(), Common.DELETE);
-    }
 }
