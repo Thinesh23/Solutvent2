@@ -27,7 +27,7 @@ public class CompanyViewHolder extends RecyclerView.ViewHolder implements
         package_price = (TextView) itemView.findViewById(R.id.package_price);
         state_location = (TextView) itemView.findViewById(R.id.state_location);
         //fav_image = (ImageView) itemView.findViewById(R.id.fav);
-        share_image = (ImageView) itemView.findViewById(R.id.btnShare);
+        //share_image = (ImageView) itemView.findViewById(R.id.btnShare);
         //quick_cart = (ImageView) itemView.findViewById(R.id.btn_quick_cart);
 
         itemView.setOnClickListener(this);

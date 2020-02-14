@@ -115,7 +115,7 @@
 
             <Button
                 android:id="@+id/btnUpdate"
-                android:text="Update"
+                android:text="Confirm Deal"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:background="@color/colorPrimary"

@@ -112,7 +112,7 @@ public class EventList extends AppCompatActivity {
     SwipeRefreshLayout swipeRefreshLayout;
 
     //Create Target from Picasso
-    Target target = new Target() {
+/*    Target target = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
             //Create Photo from Bitmap
@@ -136,7 +136,7 @@ public class EventList extends AppCompatActivity {
         public void onPrepareLoad(Drawable placeHolderDrawable) {
 
         }
-    };
+    };*/
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -350,14 +350,14 @@ public class EventList extends AppCompatActivity {
                 Picasso.with(getBaseContext()).load(model.getCompanyImage()).into(viewHolder.event_image);
 
                 //Click to share
-                viewHolder.share_image.setOnClickListener(new View.OnClickListener() {
+/*                viewHolder.share_image.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Picasso.with(getApplicationContext())
                                 .load(model.getCompanyImage())
                                 .into(target);
                     }
-                });
+                });*/
                 final User local = model;
                viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override

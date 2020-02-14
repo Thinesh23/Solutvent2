@@ -75,7 +75,7 @@ public class BookingStep2Fragment  extends Fragment{
         request.setTime(new StringBuilder(Common.convertTimeSlotToString(Common.currentTimeSlot)).toString());
         request.setDate(simpleDateFormat.format(Common.currentDate.getTime()));
         request.setSlot(Long.valueOf(Common.currentTimeSlot));
-        request.setStatus("Pending");
+        request.setStatus("0");
         request.setPayment("0");
 
         database = FirebaseDatabase.getInstance();

@@ -69,8 +69,7 @@ public class BookingHistory extends AppCompatActivity {
 
     private static final int PAYPAL_REQUEST_CODE = 9999;
 
-    String bookingid="";
-    String paid="";
+    String bookingid="", status="";
 
     Request currentRequest;
 
@@ -139,7 +138,7 @@ public class BookingHistory extends AppCompatActivity {
 
        adapter = new FirebaseRecyclerAdapter<Request, BookingHistoryViewHolder>(orderOptions) {
            @Override
-           protected void onBindViewHolder(@NonNull BookingHistoryViewHolder viewHolder, final int position, @NonNull final Request model) {
+           protected void onBindViewHolder(@NonNull final BookingHistoryViewHolder viewHolder, final int position, @NonNull final Request model) {
                viewHolder.txt_booking_date.setText(model.getDate());
                viewHolder.txt_booking_status.setText(convertCodeToStatus(model.getStatus()));
                viewHolder.txt_booking_name.setText(model.getPlannerCompanyName());
@@ -147,6 +146,8 @@ public class BookingHistory extends AppCompatActivity {
 
                //if status is 100% then only btn confirm can be clicked and it will call payment else the btn is hidden
                if (viewHolder.txt_booking_status.getText().equals("100% Complete")){
+                   status = "complete";
+                   viewHolder.btnConfirm.setText("Confirm Payment");
                    viewHolder.txt_booking_payment.setVisibility(View.VISIBLE);
                    viewHolder.txt_booking_payment.setText("Total: RM " + model.getPayment());
                    viewHolder.btnConfirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
@@ -161,7 +162,21 @@ public class BookingHistory extends AppCompatActivity {
                } else if (viewHolder.txt_booking_status.getText().equals("Completed")) {
                    viewHolder.btnConfirm.setVisibility(View.GONE);
                    viewHolder.txt_booking_payment.setText("Payment Completed");
-               } else {
+               } else if (viewHolder.txt_booking_status.getText().equals("Awaiting Customer")){
+                   viewHolder.txt_booking_payment.setVisibility(View.GONE);
+                   status = "waiting";
+                   viewHolder.btnConfirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
+                   viewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
+                       @Override
+                       public void onClick(View v) {
+                           confirmBooking();
+                           bookingid = adapter.getRef(position).getKey();
+                           currentRequest = adapter.getItem(position);
+                       }
+                   });
+               }
+               else {
+                   viewHolder.btnConfirm.setText("On Progress");
                    viewHolder.txt_booking_payment.setVisibility(View.GONE);
                    viewHolder.btnConfirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colordarker_gray));
                }
@@ -178,6 +193,31 @@ public class BookingHistory extends AppCompatActivity {
        };
 
        loadComment();
+    }
+
+    private void confirmBooking(){
+        requests.child(bookingid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Request item = dataSnapshot.getValue(Request.class);
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("status", "1");
+                requests.child(bookingid).updateChildren(hashMap)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                sendNotification();
+                                bookingid = "";
+                                Toast.makeText(BookingHistory.this, "Customer confirmed booking, awaiting planner", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //Confirm payment using MYR currency, this will call the paypall activity
@@ -214,7 +254,7 @@ public class BookingHistory extends AppCompatActivity {
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 Request item = dataSnapshot.getValue(Request.class);
                                 HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put("status", "6");
+                                hashMap.put("status", "7");
                                 requests.child(bookingid).updateChildren(hashMap)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
@@ -260,7 +300,12 @@ public class BookingHistory extends AppCompatActivity {
 
                             Map<String,String> dataSend = new HashMap<>();
                             dataSend.put("title","Booking Status");
-                            dataSend.put("message","Payment has been made by " + Common.currentUser.getFirstName());
+                            if (status.equals("waiting")){
+                                dataSend.put("message","Booking has been confirmed by Customer: " + Common.currentUser.getFirstName());
+                            } else if (status.equals("complete")){
+                                dataSend.put("message","Payment has been made by " + Common.currentUser.getFirstName());
+                            }
+
                             DataMessage dataMessage = new DataMessage(token.getToken(),dataSend);
 
                             mService.sendNotification(dataMessage)
@@ -303,19 +348,23 @@ public class BookingHistory extends AppCompatActivity {
 
     //get status of the booking and convert it to string
     private String convertCodeToStatus(String status) {
-        if(status.equals("6"))
+        if(status.equals("7"))
             return "Completed";
+        else if(status.equals("0"))
+            return "Awaiting Customer";
         else if(status.equals("1"))
-            return "Deal Confirmed";
+            return "Awaiting Planner";
         else if(status.equals("2"))
-            return "25% Complete";
+            return "Deal Confirmed";
         else if(status.equals("3"))
-            return "50% Complete";
+            return "25% Complete";
         else if(status.equals("4"))
-            return "75% Complete";
+            return "50% Complete";
         else if(status.equals("5"))
+            return "75% Complete";
+        else if(status.equals("6"))
             return "100% Complete";
         else
-            return "Pending";
+            return "Awaiting Customer";
     }
 }
