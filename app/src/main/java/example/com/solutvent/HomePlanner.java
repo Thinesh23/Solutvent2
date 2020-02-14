@@ -53,7 +53,10 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -103,7 +106,7 @@ public class HomePlanner extends AppCompatActivity
     String stateName = "";
     List<String> stateList = new ArrayList<>();
     String adminPhone = "";
-    String spinnerstatus = "";
+    String spinnerstatus = "",currentDate="";
 
 
     Category newCategory;
@@ -205,6 +208,20 @@ public class HomePlanner extends AppCompatActivity
                         }
                     });
                     holder.txtbookingstate.setText("Track Progress");
+                }
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                currentDate = model.getDate();
+                try {
+                    Date strDate = sdf.parse(currentDate);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(strDate);
+                    c.add(Calendar.DATE,1);
+                    if(c.getTime().compareTo(new Date()) < 0 && convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")){
+                        deleteBooking(adapter.getRef(position).getKey());
+                    }
+                } catch (java.text.ParseException e){
+                    e.printStackTrace();
                 }
 
 
