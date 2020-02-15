@@ -255,6 +255,7 @@ public class Home extends AppCompatActivity
         Menu nav_menu = navigationView.getMenu();
         if(Common.currentUser.getIsPlanner().equals("true")){
             nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
+            nav_menu.findItem(R.id.nav_booking_manage).setVisible(false);
             nav_menu.findItem(R.id.nav_show_feedback).setVisible(true);
             nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
         } else {
@@ -262,11 +263,13 @@ public class Home extends AppCompatActivity
             if (Common.currentUser.getIsStaff().equals("true")) {
                 nav_menu.findItem(R.id.nav_manage_user).setVisible(true);
                 nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
+                nav_menu.findItem(R.id.nav_booking_manage).setVisible(true);
                 nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
             }
             else {
                 nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
                 nav_menu.findItem(R.id.nav_booking_history).setVisible(true);
+                nav_menu.findItem(R.id.nav_booking_manage).setVisible(false);
                 nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
             }
         }
@@ -671,6 +674,9 @@ public class Home extends AppCompatActivity
             startActivity(userIntent);
         } else if (item.getItemId() == R.id.nav_message){
             Intent chatIntent = new Intent(Home.this,ChattingMenu.class);
+            startActivity(chatIntent);
+        } else if (item.getItemId() == R.id.nav_booking_manage){
+            Intent chatIntent = new Intent(Home.this,ManageBooking.class);
             startActivity(chatIntent);
         }
 

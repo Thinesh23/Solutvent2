@@ -72,7 +72,10 @@ public class ShowComment extends AppCompatActivity{
             public void onRefresh() {
                 //make sure current user not null then only load the comments into the recycle view
                 //using firebaserecycler
-                if(Common.currentUser != null) {
+                if(getIntent()!=null){
+                    eventId = getIntent().getStringExtra(Common.INTENT_EVENT_ID);
+                }
+                if(!eventId.isEmpty() && eventId !=null){
                     Query query = ratingTbl.orderByChild("eventId").equalTo(eventId);
 
                     FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()
@@ -105,7 +108,10 @@ public class ShowComment extends AppCompatActivity{
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(true);
-                if(Common.currentUser != null) {
+                if(getIntent()!=null){
+                    eventId = getIntent().getStringExtra(Common.INTENT_EVENT_ID);
+                }
+                if(!eventId.isEmpty() && eventId !=null){
                     Query query = ratingTbl.orderByChild("eventId").equalTo(eventId);
 
                     FirebaseRecyclerOptions<Rating> options = new FirebaseRecyclerOptions.Builder<Rating>()

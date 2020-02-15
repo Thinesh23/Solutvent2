@@ -103,7 +103,7 @@ public class BookingStep2Fragment  extends Fragment{
                 requests.child(request.getId())
                         .setValue(request);
 
-                    Toast.makeText(getContext(), "Thank you, booking confirmed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Thank you, appointment confirmed", Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                     resetStaticData();
             }

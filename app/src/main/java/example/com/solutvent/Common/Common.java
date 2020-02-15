@@ -24,8 +24,8 @@ public class Common {
     public static final String KEY_TIME_SLOT = "TIME_SLOT";
     public static final String KEY_STEP = "STEP";
     public static final String KEY_CONFIRM_BOOKING = "CONFIRM_BOOKING";
-    public static final int FIVE_MINUTES = 5 * 60 * 1000;
-    public static final int TWO_MINUTES = 2 * 60 * 1000;
+    public static final long FIVE_MINUTES = 5 * 60 * 1000;
+    public static final long TWO_MINUTES = 2 * 60 * 1000;
     public static int currentTimeSlot = -1;
     public static User currentUser;
     public static User currentCompany;

@@ -177,8 +177,11 @@ public class BookingHistory extends AppCompatActivity {
                            currentRequest = adapter.getItem(position);
                        }
                    });
-               }
-               else {
+               } else if (viewHolder.txt_booking_status.getText().equals("Booking Cancelled")){
+                   viewHolder.txt_booking_payment.setVisibility(View.GONE);
+                   viewHolder.btnConfirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colordarker_gray));
+                   viewHolder.btnConfirm.setVisibility(View.GONE);
+               }else {
                    viewHolder.btnConfirm.setText("On Progress");
                    viewHolder.txt_booking_payment.setVisibility(View.GONE);
                    viewHolder.btnConfirm.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), R.color.colordarker_gray));
@@ -369,6 +372,8 @@ public class BookingHistory extends AppCompatActivity {
             return "75% Complete";
         else if(status.equals("6"))
             return "100% Complete";
+        else if(status.equals("8"))
+            return "Booking Cancelled";
         else
             return "Awaiting Customer";
     }

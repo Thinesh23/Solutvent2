@@ -103,8 +103,6 @@ public class HomePlanner extends AppCompatActivity
     MaterialEditText edtName;
     Button btnUpload,btnSelect;
 
-    Request currentRequest;
-
     String stateName = "";
     List<String> stateList = new ArrayList<>();
     String adminPhone = "";
@@ -196,7 +194,10 @@ public class HomePlanner extends AppCompatActivity
                 } else if (holder.txtStatusState.getText().toString().equals("Awaiting Customer")){
                     holder.txtbookingstate.setText("Awaiting Customer");
                     holder.btnUpdate.setVisibility(View.GONE);
-                }else if (holder.txtStatusState.getText().toString().equals("100% Complete")){
+                } else if (holder.txtStatusState.getText().toString().equals("Booking Cancelled")){
+                    holder.txtbookingstate.setText("Booking Cancelled");
+                    holder.btnUpdate.setVisibility(View.GONE);
+                } else if (holder.txtStatusState.getText().toString().equals("100% Complete")){
                     holder.txtbookingstate.setText("Pending Payment");
                     holder.btnUpdate.setVisibility(View.GONE);
                 } else if (holder.txtStatusState.getText().toString().equals("Completed")){
@@ -223,7 +224,9 @@ public class HomePlanner extends AppCompatActivity
                     c.add(Calendar.DATE,1);
                     if(c.getTime().compareTo(new Date()) < 0 && (convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")
                                 || convertCodeToStatus(model.getStatus()).equals("Awaiting Customer"))){
-                        deleteBooking(adapter.getRef(position).getKey());
+                        cancelBooking();
+                        bookingid = adapter.getRef(position).getKey();
+                        currentRequest2 = adapter.getItem(position);
                     }
                 } catch (java.text.ParseException e){
                     e.printStackTrace();
@@ -233,8 +236,10 @@ public class HomePlanner extends AppCompatActivity
                 Long currentime = System.currentTimeMillis();
                 Long difference = currentime - bookingDate;
 
-                if ( difference >= Common.TWO_MINUTES && convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")){
-                    deleteBooking(adapter.getRef(position).getKey());
+                if ( difference > Common.FIVE_MINUTES && convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")){
+                    cancelBooking();
+                    bookingid = adapter.getRef(position).getKey();
+                    currentRequest2 = adapter.getItem(position);
                     Toast.makeText(getBaseContext(), "Booking is deleted after 5 mins !!", Toast.LENGTH_SHORT).show();
                 }
 
@@ -311,17 +316,20 @@ public class HomePlanner extends AppCompatActivity
         Menu nav_menu = navigationView.getMenu();
         if(Common.currentUser.getIsPlanner().equals("true")){
             nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
+            nav_menu.findItem(R.id.nav_booking_manage).setVisible(false);
             nav_menu.findItem(R.id.nav_show_feedback).setVisible(true);
             nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
         } else {
 
             if (Common.currentUser.getIsStaff().equals("true")) {
                 nav_menu.findItem(R.id.nav_manage_user).setVisible(true);
+                nav_menu.findItem(R.id.nav_booking_manage).setVisible(true);
                 nav_menu.findItem(R.id.nav_booking_history).setVisible(false);
                 nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
             }
             else {
                 nav_menu.findItem(R.id.nav_manage_user).setVisible(false);
+                nav_menu.findItem(R.id.nav_booking_manage).setVisible(false);
                 nav_menu.findItem(R.id.nav_booking_history).setVisible(true);
                 nav_menu.findItem(R.id.nav_show_feedback).setVisible(false);
             }
@@ -364,9 +372,29 @@ public class HomePlanner extends AppCompatActivity
     }
 
 
-    private void deleteBooking(String key) {
-        request.child(key).removeValue(); // delete item from firebase json Requests
-        loadMenu();
+    private void cancelBooking() {
+        request.child(bookingid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Request item = dataSnapshot.getValue(Request.class);
+                HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("status", "8");
+                request.child(bookingid).updateChildren(hashMap)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                sendOrderStatusToUser(bookingid, currentRequest2);
+                                bookingid = "";
+                                Toast.makeText(HomePlanner.this, "Planner never responded, booking cancelled", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void confirmDeal(){
@@ -937,6 +965,8 @@ public class HomePlanner extends AppCompatActivity
             return "100% Complete";
         else if(status.equals("7"))
             return "Completed";
+        else if(status.equals("8"))
+            return "Booking Cancelled";
         else
             return "Pending";
     }
