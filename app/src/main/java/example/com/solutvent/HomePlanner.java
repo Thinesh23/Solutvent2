@@ -217,7 +217,8 @@ public class HomePlanner extends AppCompatActivity
                     Calendar c = Calendar.getInstance();
                     c.setTime(strDate);
                     c.add(Calendar.DATE,1);
-                    if(c.getTime().compareTo(new Date()) < 0 && convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")){
+                    if(c.getTime().compareTo(new Date()) < 0 && (convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")
+                                || convertCodeToStatus(model.getStatus()).equals("Awaiting Customer"))){
                         deleteBooking(adapter.getRef(position).getKey());
                     }
                 } catch (java.text.ParseException e){
