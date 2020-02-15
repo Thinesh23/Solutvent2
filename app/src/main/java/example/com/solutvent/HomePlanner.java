@@ -31,6 +31,7 @@ import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import static java.util.concurrent.TimeUnit.*;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -59,6 +60,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -107,6 +109,8 @@ public class HomePlanner extends AppCompatActivity
     List<String> stateList = new ArrayList<>();
     String adminPhone = "";
     String spinnerstatus = "",currentDate="";
+    long bookingDate;
+    SimpleDateFormat inputParser = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
 
     Category newCategory;
@@ -225,6 +229,14 @@ public class HomePlanner extends AppCompatActivity
                     e.printStackTrace();
                 }
 
+                bookingDate = Long.parseLong(model.getBookingTime());
+                Long currentime = System.currentTimeMillis();
+                Long difference = currentime - bookingDate;
+
+                if ( difference >= Common.TWO_MINUTES && convertCodeToStatus(model.getStatus()).equals("Awaiting Planner")){
+                    deleteBooking(adapter.getRef(position).getKey());
+                    Toast.makeText(getBaseContext(), "Booking is deleted after 5 mins !!", Toast.LENGTH_SHORT).show();
+                }
 
             }
 
@@ -342,9 +354,19 @@ public class HomePlanner extends AppCompatActivity
 
     }
 
+    private Date parseDate(String date) {
+
+        try {
+            return inputParser.parse(date);
+        } catch (java.text.ParseException e) {
+            return new Date(0);
+        }
+    }
+
+
     private void deleteBooking(String key) {
         request.child(key).removeValue(); // delete item from firebase json Requests
-        adapter.notifyDataSetChanged();
+        loadMenu();
     }
 
     private void confirmDeal(){

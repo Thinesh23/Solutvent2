@@ -77,6 +77,7 @@ public class BookingStep2Fragment  extends Fragment{
         request.setSlot(Long.valueOf(Common.currentTimeSlot));
         request.setStatus("0");
         request.setPayment("0");
+        request.setBookingTime("0");
 
         database = FirebaseDatabase.getInstance();
         booking = database.getReference("Bookings").child(Common.currentCompany.getPhone()).child(Common.simpleDateFormat.format(Common.currentDate.getTime()));

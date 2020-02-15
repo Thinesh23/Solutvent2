@@ -36,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -69,7 +71,7 @@ public class BookingHistory extends AppCompatActivity {
 
     private static final int PAYPAL_REQUEST_CODE = 9999;
 
-    String bookingid="", status="";
+    String bookingid="", status="", currentDate="";
 
     Request currentRequest;
 
@@ -169,6 +171,7 @@ public class BookingHistory extends AppCompatActivity {
                    viewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
                        @Override
                        public void onClick(View v) {
+                           currentDate = model.getDate();
                            confirmBooking();
                            bookingid = adapter.getRef(position).getKey();
                            currentRequest = adapter.getItem(position);
@@ -196,11 +199,13 @@ public class BookingHistory extends AppCompatActivity {
     }
 
     private void confirmBooking(){
+        final String currentime = String.valueOf(System.currentTimeMillis());
         requests.child(bookingid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Request item = dataSnapshot.getValue(Request.class);
                 HashMap<String, Object> hashMap = new HashMap<>();
+                hashMap.put("bookingTime",currentime);
                 hashMap.put("status", "1");
                 requests.child(bookingid).updateChildren(hashMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {

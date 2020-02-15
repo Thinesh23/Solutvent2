@@ -13,6 +13,7 @@ public class Request {
     private String plannerAddress;
     private String date;
     private String time;
+    private String bookingTime;
     private String status;
     private String payment;
     private Long slot;
@@ -21,7 +22,7 @@ public class Request {
 
     }
 
-    public Request(String id, String customerName, String customerPhone, String customerEmail, String customerAddress, String plannerPhone, String plannerEmail, String plannerCompanyName, String plannerPrice, String plannerAddress, String date, String time, String status, String payment, Long slot) {
+    public Request(String id, String customerName, String customerPhone, String customerEmail, String customerAddress, String plannerPhone, String plannerEmail, String plannerCompanyName, String plannerPrice, String plannerAddress, String date, String time, String bookingTime, String status, String payment, Long slot) {
         this.id = id;
         this.customerName = customerName;
         this.customerPhone = customerPhone;
@@ -34,9 +35,18 @@ public class Request {
         this.plannerAddress = plannerAddress;
         this.date = date;
         this.time = time;
+        this.bookingTime = bookingTime;
         this.status = status;
         this.payment = payment;
         this.slot = slot;
+    }
+
+    public String getBookingTime() {
+        return bookingTime;
+    }
+
+    public void setBookingTime(String bookingTime) {
+        this.bookingTime = bookingTime;
     }
 
     public String getCustomerName() {
